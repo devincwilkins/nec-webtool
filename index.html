@@ -1,0 +1,1790 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="initial-scale=1,user-scalable=no,maximum-scale=1,width=device-width">
+        <meta name="mobile-web-app-capable" content="yes">
+        <meta name="apple-mobile-web-app-capable" content="yes">
+        <link rel="stylesheet" href="css/leaflet.css">
+        <link rel="stylesheet" href="css/L.Control.Layers.Tree.css">
+        <link rel="stylesheet" href="css/qgis2web.css">
+        <link rel="stylesheet" href="css/fontawesome-all.min.css">
+        <style>
+        html, body, #map {
+            width: 100%;
+            height: 100%;
+            padding: 0;
+            margin: 0;
+        }
+        </style>
+        <title>Northeast Corridor Webtool</title>
+    </head>
+    <body>
+        <div id="map">
+        </div>
+        <script src="js/qgis2web_expressions.js"></script>
+        <script src="js/leaflet.js"></script>
+        <script src="js/L.Control.Layers.Tree.min.js"></script>
+        <script src="js/leaflet.rotatedMarker.js"></script>
+        <script src="js/leaflet.pattern.js"></script>
+        <script src="js/leaflet-hash.js"></script>
+        <script src="js/Autolinker.min.js"></script>
+        <script src="js/rbush.min.js"></script>
+        <script src="js/labelgun.min.js"></script>
+        <script src="js/labels.js"></script>
+        <script src="data/Total_Network_1.js"></script>
+        <script>
+        var map = L.map('map', {
+            zoomControl:true, maxZoom:28, minZoom:1
+        }).fitBounds([[39.46741666265148,-75.90677274585765],[39.6137295904215,-75.65645288673879]]);
+        var hash = new L.Hash(map);
+        map.attributionControl.setPrefix('<a href="https://github.com/tomchadwin/qgis2web" target="_blank">qgis2web</a> &middot; <a href="https://leafletjs.com" title="A JS library for interactive maps">Leaflet</a> &middot; <a href="https://qgis.org">QGIS</a>');
+        var autolinker = new Autolinker({truncate: {length: 30, location: 'smart'}});
+        function removeEmptyRowsFromPopupContent(content, feature) {
+         var tempDiv = document.createElement('div');
+         tempDiv.innerHTML = content;
+         var rows = tempDiv.querySelectorAll('tr');
+         for (var i = 0; i < rows.length; i++) {
+             var td = rows[i].querySelector('td.visible-with-data');
+             var key = td ? td.id : '';
+             if (td && td.classList.contains('visible-with-data') && feature.properties[key] == null) {
+                 rows[i].parentNode.removeChild(rows[i]);
+             }
+         }
+         return tempDiv.innerHTML;
+        }
+        document.querySelector(".leaflet-popup-pane").addEventListener("load", function(event) {
+          var tagName = event.target.tagName,
+            popup = map._popup;
+          // Also check if flag is already set.
+          if (tagName === "IMG" && popup && !popup._updated) {
+            popup._updated = true; // Set flag to prevent looping.
+            popup.update();
+          }
+        }, true);
+        var bounds_group = new L.featureGroup([]);
+        function setBounds() {
+        }
+        map.createPane('pane_Positron_0');
+        map.getPane('pane_Positron_0').style.zIndex = 400;
+        var layer_Positron_0 = L.tileLayer('https://a.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png', {
+            pane: 'pane_Positron_0',
+            opacity: 1.0,
+            attribution: '<a href="https://cartodb.com/basemaps/">Map tiles by CartoDB, under CC BY 3.0. Data by OpenStreetMap, under ODbL.</a>',
+            minZoom: 1,
+            maxZoom: 28,
+            minNativeZoom: 0,
+            maxNativeZoom: 20
+        });
+        layer_Positron_0;
+        map.addLayer(layer_Positron_0);
+        function pop_Total_Network_1(feature, layer) {
+            var popupContent = '<table>\
+                    <tr>\
+                        <th scope="row">maxspeed</th>\
+                        <td class="visible-with-data" id="maxspeed">' + (feature.properties['maxspeed'] !== null ? autolinker.link(feature.properties['maxspeed'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">track_id</th>\
+                        <td class="visible-with-data" id="track_id">' + (feature.properties['track_id'] !== null ? autolinker.link(feature.properties['track_id'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">doc</th>\
+                        <td class="visible-with-data" id="doc">' + (feature.properties['doc'] !== null ? autolinker.link(feature.properties['doc'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">length</th>\
+                        <td class="visible-with-data" id="length">' + (feature.properties['length'] !== null ? autolinker.link(feature.properties['length'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                </table>';
+            layer.bindPopup(popupContent, {maxHeight: 400});
+            var popup = layer.getPopup();
+            var content = popup.getContent();
+            var updatedContent = removeEmptyRowsFromPopupContent(content, feature);
+            popup.setContent(updatedContent);
+        }
+
+        function style_Total_Network_1_0(feature) {
+            switch(String(feature.properties['doc'])) {
+                case '0.0':
+                    return {
+                pane: 'pane_Total_Network_1',
+                opacity: 1,
+                color: 'rgba(48,18,59,1.0)',
+                dashArray: '',
+                lineCap: 'square',
+                lineJoin: 'bevel',
+                weight: 1.0,
+                fillOpacity: 0,
+                interactive: true,
+            }
+                    break;
+                case '0.07':
+                    return {
+                pane: 'pane_Total_Network_1',
+                opacity: 1,
+                color: 'rgba(51,24,74,1.0)',
+                dashArray: '',
+                lineCap: 'square',
+                lineJoin: 'bevel',
+                weight: 1.0,
+                fillOpacity: 0,
+                interactive: true,
+            }
+                    break;
+                case '0.1':
+                    return {
+                pane: 'pane_Total_Network_1',
+                opacity: 1,
+                color: 'rgba(53,30,88,1.0)',
+                dashArray: '',
+                lineCap: 'square',
+                lineJoin: 'bevel',
+                weight: 1.0,
+                fillOpacity: 0,
+                interactive: true,
+            }
+                    break;
+                case '0.15':
+                    return {
+                pane: 'pane_Total_Network_1',
+                opacity: 1,
+                color: 'rgba(55,36,103,1.0)',
+                dashArray: '',
+                lineCap: 'square',
+                lineJoin: 'bevel',
+                weight: 1.0,
+                fillOpacity: 0,
+                interactive: true,
+            }
+                    break;
+                case '0.18':
+                    return {
+                pane: 'pane_Total_Network_1',
+                opacity: 1,
+                color: 'rgba(57,42,116,1.0)',
+                dashArray: '',
+                lineCap: 'square',
+                lineJoin: 'bevel',
+                weight: 1.0,
+                fillOpacity: 0,
+                interactive: true,
+            }
+                    break;
+                case '0.2':
+                    return {
+                pane: 'pane_Total_Network_1',
+                opacity: 1,
+                color: 'rgba(59,47,129,1.0)',
+                dashArray: '',
+                lineCap: 'square',
+                lineJoin: 'bevel',
+                weight: 1.0,
+                fillOpacity: 0,
+                interactive: true,
+            }
+                    break;
+                case '0.25':
+                    return {
+                pane: 'pane_Total_Network_1',
+                opacity: 1,
+                color: 'rgba(61,54,140,1.0)',
+                dashArray: '',
+                lineCap: 'square',
+                lineJoin: 'bevel',
+                weight: 1.0,
+                fillOpacity: 0,
+                interactive: true,
+            }
+                    break;
+                case '0.3':
+                    return {
+                pane: 'pane_Total_Network_1',
+                opacity: 1,
+                color: 'rgba(63,60,152,1.0)',
+                dashArray: '',
+                lineCap: 'square',
+                lineJoin: 'bevel',
+                weight: 1.0,
+                fillOpacity: 0,
+                interactive: true,
+            }
+                    break;
+                case '0.33':
+                    return {
+                pane: 'pane_Total_Network_1',
+                opacity: 1,
+                color: 'rgba(64,65,163,1.0)',
+                dashArray: '',
+                lineCap: 'square',
+                lineJoin: 'bevel',
+                weight: 1.0,
+                fillOpacity: 0,
+                interactive: true,
+            }
+                    break;
+                case '0.35':
+                    return {
+                pane: 'pane_Total_Network_1',
+                opacity: 1,
+                color: 'rgba(65,71,173,1.0)',
+                dashArray: '',
+                lineCap: 'square',
+                lineJoin: 'bevel',
+                weight: 1.0,
+                fillOpacity: 0,
+                interactive: true,
+            }
+                    break;
+                case '0.367':
+                    return {
+                pane: 'pane_Total_Network_1',
+                opacity: 1,
+                color: 'rgba(66,76,183,1.0)',
+                dashArray: '',
+                lineCap: 'square',
+                lineJoin: 'bevel',
+                weight: 1.0,
+                fillOpacity: 0,
+                interactive: true,
+            }
+                    break;
+                case '0.37':
+                    return {
+                pane: 'pane_Total_Network_1',
+                opacity: 1,
+                color: 'rgba(68,82,192,1.0)',
+                dashArray: '',
+                lineCap: 'square',
+                lineJoin: 'bevel',
+                weight: 1.0,
+                fillOpacity: 0,
+                interactive: true,
+            }
+                    break;
+                case '0.4':
+                    return {
+                pane: 'pane_Total_Network_1',
+                opacity: 1,
+                color: 'rgba(68,87,201,1.0)',
+                dashArray: '',
+                lineCap: 'square',
+                lineJoin: 'bevel',
+                weight: 1.0,
+                fillOpacity: 0,
+                interactive: true,
+            }
+                    break;
+                case '0.42':
+                    return {
+                pane: 'pane_Total_Network_1',
+                opacity: 1,
+                color: 'rgba(69,93,209,1.0)',
+                dashArray: '',
+                lineCap: 'square',
+                lineJoin: 'bevel',
+                weight: 1.0,
+                fillOpacity: 0,
+                interactive: true,
+            }
+                    break;
+                case '0.43':
+                    return {
+                pane: 'pane_Total_Network_1',
+                opacity: 1,
+                color: 'rgba(70,98,216,1.0)',
+                dashArray: '',
+                lineCap: 'square',
+                lineJoin: 'bevel',
+                weight: 1.0,
+                fillOpacity: 0,
+                interactive: true,
+            }
+                    break;
+                case '0.45':
+                    return {
+                pane: 'pane_Total_Network_1',
+                opacity: 1,
+                color: 'rgba(70,103,222,1.0)',
+                dashArray: '',
+                lineCap: 'square',
+                lineJoin: 'bevel',
+                weight: 1.0,
+                fillOpacity: 0,
+                interactive: true,
+            }
+                    break;
+                case '0.5':
+                    return {
+                pane: 'pane_Total_Network_1',
+                opacity: 1,
+                color: 'rgba(71,109,229,1.0)',
+                dashArray: '',
+                lineCap: 'square',
+                lineJoin: 'bevel',
+                weight: 1.0,
+                fillOpacity: 0,
+                interactive: true,
+            }
+                    break;
+                case '0.52':
+                    return {
+                pane: 'pane_Total_Network_1',
+                opacity: 1,
+                color: 'rgba(71,114,234,1.0)',
+                dashArray: '',
+                lineCap: 'square',
+                lineJoin: 'bevel',
+                weight: 1.0,
+                fillOpacity: 0,
+                interactive: true,
+            }
+                    break;
+                case '0.53':
+                    return {
+                pane: 'pane_Total_Network_1',
+                opacity: 1,
+                color: 'rgba(71,119,239,1.0)',
+                dashArray: '',
+                lineCap: 'square',
+                lineJoin: 'bevel',
+                weight: 1.0,
+                fillOpacity: 0,
+                interactive: true,
+            }
+                    break;
+                case '0.55':
+                    return {
+                pane: 'pane_Total_Network_1',
+                opacity: 1,
+                color: 'rgba(70,124,243,1.0)',
+                dashArray: '',
+                lineCap: 'square',
+                lineJoin: 'bevel',
+                weight: 1.0,
+                fillOpacity: 0,
+                interactive: true,
+            }
+                    break;
+                case '0.57':
+                    return {
+                pane: 'pane_Total_Network_1',
+                opacity: 1,
+                color: 'rgba(70,129,247,1.0)',
+                dashArray: '',
+                lineCap: 'square',
+                lineJoin: 'bevel',
+                weight: 1.0,
+                fillOpacity: 0,
+                interactive: true,
+            }
+                    break;
+                case '0.6':
+                    return {
+                pane: 'pane_Total_Network_1',
+                opacity: 1,
+                color: 'rgba(70,134,251,1.0)',
+                dashArray: '',
+                lineCap: 'square',
+                lineJoin: 'bevel',
+                weight: 1.0,
+                fillOpacity: 0,
+                interactive: true,
+            }
+                    break;
+                case '0.62':
+                    return {
+                pane: 'pane_Total_Network_1',
+                opacity: 1,
+                color: 'rgba(69,139,253,1.0)',
+                dashArray: '',
+                lineCap: 'square',
+                lineJoin: 'bevel',
+                weight: 1.0,
+                fillOpacity: 0,
+                interactive: true,
+            }
+                    break;
+                case '0.65':
+                    return {
+                pane: 'pane_Total_Network_1',
+                opacity: 1,
+                color: 'rgba(67,144,254,1.0)',
+                dashArray: '',
+                lineCap: 'square',
+                lineJoin: 'bevel',
+                weight: 1.0,
+                fillOpacity: 0,
+                interactive: true,
+            }
+                    break;
+                case '0.67':
+                    return {
+                pane: 'pane_Total_Network_1',
+                opacity: 1,
+                color: 'rgba(65,150,255,1.0)',
+                dashArray: '',
+                lineCap: 'square',
+                lineJoin: 'bevel',
+                weight: 1.0,
+                fillOpacity: 0,
+                interactive: true,
+            }
+                    break;
+                case '0.7':
+                    return {
+                pane: 'pane_Total_Network_1',
+                opacity: 1,
+                color: 'rgba(62,155,254,1.0)',
+                dashArray: '',
+                lineCap: 'square',
+                lineJoin: 'bevel',
+                weight: 1.0,
+                fillOpacity: 0,
+                interactive: true,
+            }
+                    break;
+                case '0.72':
+                    return {
+                pane: 'pane_Total_Network_1',
+                opacity: 1,
+                color: 'rgba(59,160,253,1.0)',
+                dashArray: '',
+                lineCap: 'square',
+                lineJoin: 'bevel',
+                weight: 1.0,
+                fillOpacity: 0,
+                interactive: true,
+            }
+                    break;
+                case '0.75':
+                    return {
+                pane: 'pane_Total_Network_1',
+                opacity: 1,
+                color: 'rgba(56,165,251,1.0)',
+                dashArray: '',
+                lineCap: 'square',
+                lineJoin: 'bevel',
+                weight: 1.0,
+                fillOpacity: 0,
+                interactive: true,
+            }
+                    break;
+                case '0.76':
+                    return {
+                pane: 'pane_Total_Network_1',
+                opacity: 1,
+                color: 'rgba(53,171,248,1.0)',
+                dashArray: '',
+                lineCap: 'square',
+                lineJoin: 'bevel',
+                weight: 1.0,
+                fillOpacity: 0,
+                interactive: true,
+            }
+                    break;
+                case '0.8':
+                    return {
+                pane: 'pane_Total_Network_1',
+                opacity: 1,
+                color: 'rgba(49,175,245,1.0)',
+                dashArray: '',
+                lineCap: 'square',
+                lineJoin: 'bevel',
+                weight: 1.0,
+                fillOpacity: 0,
+                interactive: true,
+            }
+                    break;
+                case '0.82':
+                    return {
+                pane: 'pane_Total_Network_1',
+                opacity: 1,
+                color: 'rgba(46,180,242,1.0)',
+                dashArray: '',
+                lineCap: 'square',
+                lineJoin: 'bevel',
+                weight: 1.0,
+                fillOpacity: 0,
+                interactive: true,
+            }
+                    break;
+                case '0.83':
+                    return {
+                pane: 'pane_Total_Network_1',
+                opacity: 1,
+                color: 'rgba(42,185,238,1.0)',
+                dashArray: '',
+                lineCap: 'square',
+                lineJoin: 'bevel',
+                weight: 1.0,
+                fillOpacity: 0,
+                interactive: true,
+            }
+                    break;
+                case '0.85':
+                    return {
+                pane: 'pane_Total_Network_1',
+                opacity: 1,
+                color: 'rgba(39,190,233,1.0)',
+                dashArray: '',
+                lineCap: 'square',
+                lineJoin: 'bevel',
+                weight: 1.0,
+                fillOpacity: 0,
+                interactive: true,
+            }
+                    break;
+                case '0.86':
+                    return {
+                pane: 'pane_Total_Network_1',
+                opacity: 1,
+                color: 'rgba(35,195,228,1.0)',
+                dashArray: '',
+                lineCap: 'square',
+                lineJoin: 'bevel',
+                weight: 1.0,
+                fillOpacity: 0,
+                interactive: true,
+            }
+                    break;
+                case '0.867':
+                    return {
+                pane: 'pane_Total_Network_1',
+                opacity: 1,
+                color: 'rgba(32,199,223,1.0)',
+                dashArray: '',
+                lineCap: 'square',
+                lineJoin: 'bevel',
+                weight: 1.0,
+                fillOpacity: 0,
+                interactive: true,
+            }
+                    break;
+                case '0.9':
+                    return {
+                pane: 'pane_Total_Network_1',
+                opacity: 1,
+                color: 'rgba(30,203,218,1.0)',
+                dashArray: '',
+                lineCap: 'square',
+                lineJoin: 'bevel',
+                weight: 1.0,
+                fillOpacity: 0,
+                interactive: true,
+            }
+                    break;
+                case '0.92':
+                    return {
+                pane: 'pane_Total_Network_1',
+                opacity: 1,
+                color: 'rgba(27,208,213,1.0)',
+                dashArray: '',
+                lineCap: 'square',
+                lineJoin: 'bevel',
+                weight: 1.0,
+                fillOpacity: 0,
+                interactive: true,
+            }
+                    break;
+                case '0.93':
+                    return {
+                pane: 'pane_Total_Network_1',
+                opacity: 1,
+                color: 'rgba(26,212,207,1.0)',
+                dashArray: '',
+                lineCap: 'square',
+                lineJoin: 'bevel',
+                weight: 1.0,
+                fillOpacity: 0,
+                interactive: true,
+            }
+                    break;
+                case '0.933':
+                    return {
+                pane: 'pane_Total_Network_1',
+                opacity: 1,
+                color: 'rgba(24,215,202,1.0)',
+                dashArray: '',
+                lineCap: 'square',
+                lineJoin: 'bevel',
+                weight: 1.0,
+                fillOpacity: 0,
+                interactive: true,
+            }
+                    break;
+                case '0.95':
+                    return {
+                pane: 'pane_Total_Network_1',
+                opacity: 1,
+                color: 'rgba(24,219,196,1.0)',
+                dashArray: '',
+                lineCap: 'square',
+                lineJoin: 'bevel',
+                weight: 1.0,
+                fillOpacity: 0,
+                interactive: true,
+            }
+                    break;
+                case '1.0':
+                    return {
+                pane: 'pane_Total_Network_1',
+                opacity: 1,
+                color: 'rgba(24,223,191,1.0)',
+                dashArray: '',
+                lineCap: 'square',
+                lineJoin: 'bevel',
+                weight: 1.0,
+                fillOpacity: 0,
+                interactive: true,
+            }
+                    break;
+                case '1.05':
+                    return {
+                pane: 'pane_Total_Network_1',
+                opacity: 1,
+                color: 'rgba(25,226,186,1.0)',
+                dashArray: '',
+                lineCap: 'square',
+                lineJoin: 'bevel',
+                weight: 1.0,
+                fillOpacity: 0,
+                interactive: true,
+            }
+                    break;
+                case '1.07':
+                    return {
+                pane: 'pane_Total_Network_1',
+                opacity: 1,
+                color: 'rgba(27,229,181,1.0)',
+                dashArray: '',
+                lineCap: 'square',
+                lineJoin: 'bevel',
+                weight: 1.0,
+                fillOpacity: 0,
+                interactive: true,
+            }
+                    break;
+                case '1.075':
+                    return {
+                pane: 'pane_Total_Network_1',
+                opacity: 1,
+                color: 'rgba(30,232,177,1.0)',
+                dashArray: '',
+                lineCap: 'square',
+                lineJoin: 'bevel',
+                weight: 1.0,
+                fillOpacity: 0,
+                interactive: true,
+            }
+                    break;
+                case '1.1':
+                    return {
+                pane: 'pane_Total_Network_1',
+                opacity: 1,
+                color: 'rgba(33,234,171,1.0)',
+                dashArray: '',
+                lineCap: 'square',
+                lineJoin: 'bevel',
+                weight: 1.0,
+                fillOpacity: 0,
+                interactive: true,
+            }
+                    break;
+                case '1.117':
+                    return {
+                pane: 'pane_Total_Network_1',
+                opacity: 1,
+                color: 'rgba(38,237,166,1.0)',
+                dashArray: '',
+                lineCap: 'square',
+                lineJoin: 'bevel',
+                weight: 1.0,
+                fillOpacity: 0,
+                interactive: true,
+            }
+                    break;
+                case '1.15':
+                    return {
+                pane: 'pane_Total_Network_1',
+                opacity: 1,
+                color: 'rgba(43,239,160,1.0)',
+                dashArray: '',
+                lineCap: 'square',
+                lineJoin: 'bevel',
+                weight: 1.0,
+                fillOpacity: 0,
+                interactive: true,
+            }
+                    break;
+                case '1.16':
+                    return {
+                pane: 'pane_Total_Network_1',
+                opacity: 1,
+                color: 'rgba(48,241,154,1.0)',
+                dashArray: '',
+                lineCap: 'square',
+                lineJoin: 'bevel',
+                weight: 1.0,
+                fillOpacity: 0,
+                interactive: true,
+            }
+                    break;
+                case '1.2':
+                    return {
+                pane: 'pane_Total_Network_1',
+                opacity: 1,
+                color: 'rgba(55,244,146,1.0)',
+                dashArray: '',
+                lineCap: 'square',
+                lineJoin: 'bevel',
+                weight: 1.0,
+                fillOpacity: 0,
+                interactive: true,
+            }
+                    break;
+                case '1.233':
+                    return {
+                pane: 'pane_Total_Network_1',
+                opacity: 1,
+                color: 'rgba(62,246,140,1.0)',
+                dashArray: '',
+                lineCap: 'square',
+                lineJoin: 'bevel',
+                weight: 1.0,
+                fillOpacity: 0,
+                interactive: true,
+            }
+                    break;
+                case '1.25':
+                    return {
+                pane: 'pane_Total_Network_1',
+                opacity: 1,
+                color: 'rgba(69,248,133,1.0)',
+                dashArray: '',
+                lineCap: 'square',
+                lineJoin: 'bevel',
+                weight: 1.0,
+                fillOpacity: 0,
+                interactive: true,
+            }
+                    break;
+                case '1.28':
+                    return {
+                pane: 'pane_Total_Network_1',
+                opacity: 1,
+                color: 'rgba(76,249,126,1.0)',
+                dashArray: '',
+                lineCap: 'square',
+                lineJoin: 'bevel',
+                weight: 1.0,
+                fillOpacity: 0,
+                interactive: true,
+            }
+                    break;
+                case '1.292':
+                    return {
+                pane: 'pane_Total_Network_1',
+                opacity: 1,
+                color: 'rgba(84,250,119,1.0)',
+                dashArray: '',
+                lineCap: 'square',
+                lineJoin: 'bevel',
+                weight: 1.0,
+                fillOpacity: 0,
+                interactive: true,
+            }
+                    break;
+                case '1.3':
+                    return {
+                pane: 'pane_Total_Network_1',
+                opacity: 1,
+                color: 'rgba(92,252,112,1.0)',
+                dashArray: '',
+                lineCap: 'square',
+                lineJoin: 'bevel',
+                weight: 1.0,
+                fillOpacity: 0,
+                interactive: true,
+            }
+                    break;
+                case '1.38':
+                    return {
+                pane: 'pane_Total_Network_1',
+                opacity: 1,
+                color: 'rgba(100,253,106,1.0)',
+                dashArray: '',
+                lineCap: 'square',
+                lineJoin: 'bevel',
+                weight: 1.0,
+                fillOpacity: 0,
+                interactive: true,
+            }
+                    break;
+                case '1.392':
+                    return {
+                pane: 'pane_Total_Network_1',
+                opacity: 1,
+                color: 'rgba(108,254,99,1.0)',
+                dashArray: '',
+                lineCap: 'square',
+                lineJoin: 'bevel',
+                weight: 1.0,
+                fillOpacity: 0,
+                interactive: true,
+            }
+                    break;
+                case '1.4':
+                    return {
+                pane: 'pane_Total_Network_1',
+                opacity: 1,
+                color: 'rgba(116,254,93,1.0)',
+                dashArray: '',
+                lineCap: 'square',
+                lineJoin: 'bevel',
+                weight: 1.0,
+                fillOpacity: 0,
+                interactive: true,
+            }
+                    break;
+                case '1.43':
+                    return {
+                pane: 'pane_Total_Network_1',
+                opacity: 1,
+                color: 'rgba(124,255,87,1.0)',
+                dashArray: '',
+                lineCap: 'square',
+                lineJoin: 'bevel',
+                weight: 1.0,
+                fillOpacity: 0,
+                interactive: true,
+            }
+                    break;
+                case '1.433':
+                    return {
+                pane: 'pane_Total_Network_1',
+                opacity: 1,
+                color: 'rgba(131,255,81,1.0)',
+                dashArray: '',
+                lineCap: 'square',
+                lineJoin: 'bevel',
+                weight: 1.0,
+                fillOpacity: 0,
+                interactive: true,
+            }
+                    break;
+                case '1.45':
+                    return {
+                pane: 'pane_Total_Network_1',
+                opacity: 1,
+                color: 'rgba(139,255,75,1.0)',
+                dashArray: '',
+                lineCap: 'square',
+                lineJoin: 'bevel',
+                weight: 1.0,
+                fillOpacity: 0,
+                interactive: true,
+            }
+                    break;
+                case '1.5':
+                    return {
+                pane: 'pane_Total_Network_1',
+                opacity: 1,
+                color: 'rgba(146,255,71,1.0)',
+                dashArray: '',
+                lineCap: 'square',
+                lineJoin: 'bevel',
+                weight: 1.0,
+                fillOpacity: 0,
+                interactive: true,
+            }
+                    break;
+                case '1.59':
+                    return {
+                pane: 'pane_Total_Network_1',
+                opacity: 1,
+                color: 'rgba(153,254,66,1.0)',
+                dashArray: '',
+                lineCap: 'square',
+                lineJoin: 'bevel',
+                weight: 1.0,
+                fillOpacity: 0,
+                interactive: true,
+            }
+                    break;
+                case '1.6':
+                    return {
+                pane: 'pane_Total_Network_1',
+                opacity: 1,
+                color: 'rgba(159,253,63,1.0)',
+                dashArray: '',
+                lineCap: 'square',
+                lineJoin: 'bevel',
+                weight: 1.0,
+                fillOpacity: 0,
+                interactive: true,
+            }
+                    break;
+                case '1.7':
+                    return {
+                pane: 'pane_Total_Network_1',
+                opacity: 1,
+                color: 'rgba(164,252,60,1.0)',
+                dashArray: '',
+                lineCap: 'square',
+                lineJoin: 'bevel',
+                weight: 1.0,
+                fillOpacity: 0,
+                interactive: true,
+            }
+                    break;
+                case '1.75':
+                    return {
+                pane: 'pane_Total_Network_1',
+                opacity: 1,
+                color: 'rgba(169,251,57,1.0)',
+                dashArray: '',
+                lineCap: 'square',
+                lineJoin: 'bevel',
+                weight: 1.0,
+                fillOpacity: 0,
+                interactive: true,
+            }
+                    break;
+                case '1.758':
+                    return {
+                pane: 'pane_Total_Network_1',
+                opacity: 1,
+                color: 'rgba(175,250,55,1.0)',
+                dashArray: '',
+                lineCap: 'square',
+                lineJoin: 'bevel',
+                weight: 1.0,
+                fillOpacity: 0,
+                interactive: true,
+            }
+                    break;
+                case '1.8':
+                    return {
+                pane: 'pane_Total_Network_1',
+                opacity: 1,
+                color: 'rgba(180,248,54,1.0)',
+                dashArray: '',
+                lineCap: 'square',
+                lineJoin: 'bevel',
+                weight: 1.0,
+                fillOpacity: 0,
+                interactive: true,
+            }
+                    break;
+                case '1.833':
+                    return {
+                pane: 'pane_Total_Network_1',
+                opacity: 1,
+                color: 'rgba(185,246,53,1.0)',
+                dashArray: '',
+                lineCap: 'square',
+                lineJoin: 'bevel',
+                weight: 1.0,
+                fillOpacity: 0,
+                interactive: true,
+            }
+                    break;
+                case '1.87':
+                    return {
+                pane: 'pane_Total_Network_1',
+                opacity: 1,
+                color: 'rgba(190,244,52,1.0)',
+                dashArray: '',
+                lineCap: 'square',
+                lineJoin: 'bevel',
+                weight: 1.0,
+                fillOpacity: 0,
+                interactive: true,
+            }
+                    break;
+                case '1.883':
+                    return {
+                pane: 'pane_Total_Network_1',
+                opacity: 1,
+                color: 'rgba(196,241,52,1.0)',
+                dashArray: '',
+                lineCap: 'square',
+                lineJoin: 'bevel',
+                weight: 1.0,
+                fillOpacity: 0,
+                interactive: true,
+            }
+                    break;
+                case '1.9':
+                    return {
+                pane: 'pane_Total_Network_1',
+                opacity: 1,
+                color: 'rgba(201,239,52,1.0)',
+                dashArray: '',
+                lineCap: 'square',
+                lineJoin: 'bevel',
+                weight: 1.0,
+                fillOpacity: 0,
+                interactive: true,
+            }
+                    break;
+                case '1.93':
+                    return {
+                pane: 'pane_Total_Network_1',
+                opacity: 1,
+                color: 'rgba(206,235,52,1.0)',
+                dashArray: '',
+                lineCap: 'square',
+                lineJoin: 'bevel',
+                weight: 1.0,
+                fillOpacity: 0,
+                interactive: true,
+            }
+                    break;
+                case '1.933':
+                    return {
+                pane: 'pane_Total_Network_1',
+                opacity: 1,
+                color: 'rgba(211,232,53,1.0)',
+                dashArray: '',
+                lineCap: 'square',
+                lineJoin: 'bevel',
+                weight: 1.0,
+                fillOpacity: 0,
+                interactive: true,
+            }
+                    break;
+                case '1.94':
+                    return {
+                pane: 'pane_Total_Network_1',
+                opacity: 1,
+                color: 'rgba(216,229,53,1.0)',
+                dashArray: '',
+                lineCap: 'square',
+                lineJoin: 'bevel',
+                weight: 1.0,
+                fillOpacity: 0,
+                interactive: true,
+            }
+                    break;
+                case '1.975':
+                    return {
+                pane: 'pane_Total_Network_1',
+                opacity: 1,
+                color: 'rgba(220,225,54,1.0)',
+                dashArray: '',
+                lineCap: 'square',
+                lineJoin: 'bevel',
+                weight: 1.0,
+                fillOpacity: 0,
+                interactive: true,
+            }
+                    break;
+                case '2.0':
+                    return {
+                pane: 'pane_Total_Network_1',
+                opacity: 1,
+                color: 'rgba(224,222,55,1.0)',
+                dashArray: '',
+                lineCap: 'square',
+                lineJoin: 'bevel',
+                weight: 1.0,
+                fillOpacity: 0,
+                interactive: true,
+            }
+                    break;
+                case '2.031':
+                    return {
+                pane: 'pane_Total_Network_1',
+                opacity: 1,
+                color: 'rgba(228,218,56,1.0)',
+                dashArray: '',
+                lineCap: 'square',
+                lineJoin: 'bevel',
+                weight: 1.0,
+                fillOpacity: 0,
+                interactive: true,
+            }
+                    break;
+                case '2.038':
+                    return {
+                pane: 'pane_Total_Network_1',
+                opacity: 1,
+                color: 'rgba(232,214,57,1.0)',
+                dashArray: '',
+                lineCap: 'square',
+                lineJoin: 'bevel',
+                weight: 1.0,
+                fillOpacity: 0,
+                interactive: true,
+            }
+                    break;
+                case '2.05':
+                    return {
+                pane: 'pane_Total_Network_1',
+                opacity: 1,
+                color: 'rgba(235,210,57,1.0)',
+                dashArray: '',
+                lineCap: 'square',
+                lineJoin: 'bevel',
+                weight: 1.0,
+                fillOpacity: 0,
+                interactive: true,
+            }
+                    break;
+                case '2.08':
+                    return {
+                pane: 'pane_Total_Network_1',
+                opacity: 1,
+                color: 'rgba(239,206,58,1.0)',
+                dashArray: '',
+                lineCap: 'square',
+                lineJoin: 'bevel',
+                weight: 1.0,
+                fillOpacity: 0,
+                interactive: true,
+            }
+                    break;
+                case '2.13':
+                    return {
+                pane: 'pane_Total_Network_1',
+                opacity: 1,
+                color: 'rgba(242,202,58,1.0)',
+                dashArray: '',
+                lineCap: 'square',
+                lineJoin: 'bevel',
+                weight: 1.0,
+                fillOpacity: 0,
+                interactive: true,
+            }
+                    break;
+                case '2.15':
+                    return {
+                pane: 'pane_Total_Network_1',
+                opacity: 1,
+                color: 'rgba(245,198,58,1.0)',
+                dashArray: '',
+                lineCap: 'square',
+                lineJoin: 'bevel',
+                weight: 1.0,
+                fillOpacity: 0,
+                interactive: true,
+            }
+                    break;
+                case '2.183':
+                    return {
+                pane: 'pane_Total_Network_1',
+                opacity: 1,
+                color: 'rgba(247,194,58,1.0)',
+                dashArray: '',
+                lineCap: 'square',
+                lineJoin: 'bevel',
+                weight: 1.0,
+                fillOpacity: 0,
+                interactive: true,
+            }
+                    break;
+                case '2.217':
+                    return {
+                pane: 'pane_Total_Network_1',
+                opacity: 1,
+                color: 'rgba(249,189,57,1.0)',
+                dashArray: '',
+                lineCap: 'square',
+                lineJoin: 'bevel',
+                weight: 1.0,
+                fillOpacity: 0,
+                interactive: true,
+            }
+                    break;
+                case '2.25':
+                    return {
+                pane: 'pane_Total_Network_1',
+                opacity: 1,
+                color: 'rgba(251,185,56,1.0)',
+                dashArray: '',
+                lineCap: 'square',
+                lineJoin: 'bevel',
+                weight: 1.0,
+                fillOpacity: 0,
+                interactive: true,
+            }
+                    break;
+                case '2.35':
+                    return {
+                pane: 'pane_Total_Network_1',
+                opacity: 1,
+                color: 'rgba(252,180,54,1.0)',
+                dashArray: '',
+                lineCap: 'square',
+                lineJoin: 'bevel',
+                weight: 1.0,
+                fillOpacity: 0,
+                interactive: true,
+            }
+                    break;
+                case '2.383':
+                    return {
+                pane: 'pane_Total_Network_1',
+                opacity: 1,
+                color: 'rgba(253,175,53,1.0)',
+                dashArray: '',
+                lineCap: 'square',
+                lineJoin: 'bevel',
+                weight: 1.0,
+                fillOpacity: 0,
+                interactive: true,
+            }
+                    break;
+                case '2.4':
+                    return {
+                pane: 'pane_Total_Network_1',
+                opacity: 1,
+                color: 'rgba(254,170,51,1.0)',
+                dashArray: '',
+                lineCap: 'square',
+                lineJoin: 'bevel',
+                weight: 1.0,
+                fillOpacity: 0,
+                interactive: true,
+            }
+                    break;
+                case '2.433':
+                    return {
+                pane: 'pane_Total_Network_1',
+                opacity: 1,
+                color: 'rgba(254,165,49,1.0)',
+                dashArray: '',
+                lineCap: 'square',
+                lineJoin: 'bevel',
+                weight: 1.0,
+                fillOpacity: 0,
+                interactive: true,
+            }
+                    break;
+                case '2.446':
+                    return {
+                pane: 'pane_Total_Network_1',
+                opacity: 1,
+                color: 'rgba(254,159,47,1.0)',
+                dashArray: '',
+                lineCap: 'square',
+                lineJoin: 'bevel',
+                weight: 1.0,
+                fillOpacity: 0,
+                interactive: true,
+            }
+                    break;
+                case '2.5':
+                    return {
+                pane: 'pane_Total_Network_1',
+                opacity: 1,
+                color: 'rgba(254,153,44,1.0)',
+                dashArray: '',
+                lineCap: 'square',
+                lineJoin: 'bevel',
+                weight: 1.0,
+                fillOpacity: 0,
+                interactive: true,
+            }
+                    break;
+                case '2.6':
+                    return {
+                pane: 'pane_Total_Network_1',
+                opacity: 1,
+                color: 'rgba(254,147,42,1.0)',
+                dashArray: '',
+                lineCap: 'square',
+                lineJoin: 'bevel',
+                weight: 1.0,
+                fillOpacity: 0,
+                interactive: true,
+            }
+                    break;
+                case '2.683':
+                    return {
+                pane: 'pane_Total_Network_1',
+                opacity: 1,
+                color: 'rgba(253,141,39,1.0)',
+                dashArray: '',
+                lineCap: 'square',
+                lineJoin: 'bevel',
+                weight: 1.0,
+                fillOpacity: 0,
+                interactive: true,
+            }
+                    break;
+                case '2.7':
+                    return {
+                pane: 'pane_Total_Network_1',
+                opacity: 1,
+                color: 'rgba(252,135,37,1.0)',
+                dashArray: '',
+                lineCap: 'square',
+                lineJoin: 'bevel',
+                weight: 1.0,
+                fillOpacity: 0,
+                interactive: true,
+            }
+                    break;
+                case '2.8':
+                    return {
+                pane: 'pane_Total_Network_1',
+                opacity: 1,
+                color: 'rgba(251,129,34,1.0)',
+                dashArray: '',
+                lineCap: 'square',
+                lineJoin: 'bevel',
+                weight: 1.0,
+                fillOpacity: 0,
+                interactive: true,
+            }
+                    break;
+                case '2.973':
+                    return {
+                pane: 'pane_Total_Network_1',
+                opacity: 1,
+                color: 'rgba(250,123,31,1.0)',
+                dashArray: '',
+                lineCap: 'square',
+                lineJoin: 'bevel',
+                weight: 1.0,
+                fillOpacity: 0,
+                interactive: true,
+            }
+                    break;
+                case '3.0':
+                    return {
+                pane: 'pane_Total_Network_1',
+                opacity: 1,
+                color: 'rgba(249,117,29,1.0)',
+                dashArray: '',
+                lineCap: 'square',
+                lineJoin: 'bevel',
+                weight: 1.0,
+                fillOpacity: 0,
+                interactive: true,
+            }
+                    break;
+                case '3.067':
+                    return {
+                pane: 'pane_Total_Network_1',
+                opacity: 1,
+                color: 'rgba(247,111,26,1.0)',
+                dashArray: '',
+                lineCap: 'square',
+                lineJoin: 'bevel',
+                weight: 1.0,
+                fillOpacity: 0,
+                interactive: true,
+            }
+                    break;
+                case '3.13':
+                    return {
+                pane: 'pane_Total_Network_1',
+                opacity: 1,
+                color: 'rgba(245,105,24,1.0)',
+                dashArray: '',
+                lineCap: 'square',
+                lineJoin: 'bevel',
+                weight: 1.0,
+                fillOpacity: 0,
+                interactive: true,
+            }
+                    break;
+                case '3.17':
+                    return {
+                pane: 'pane_Total_Network_1',
+                opacity: 1,
+                color: 'rgba(243,99,21,1.0)',
+                dashArray: '',
+                lineCap: 'square',
+                lineJoin: 'bevel',
+                weight: 1.0,
+                fillOpacity: 0,
+                interactive: true,
+            }
+                    break;
+                case '3.2':
+                    return {
+                pane: 'pane_Total_Network_1',
+                opacity: 1,
+                color: 'rgba(241,93,19,1.0)',
+                dashArray: '',
+                lineCap: 'square',
+                lineJoin: 'bevel',
+                weight: 1.0,
+                fillOpacity: 0,
+                interactive: true,
+            }
+                    break;
+                case '3.233':
+                    return {
+                pane: 'pane_Total_Network_1',
+                opacity: 1,
+                color: 'rgba(239,87,17,1.0)',
+                dashArray: '',
+                lineCap: 'square',
+                lineJoin: 'bevel',
+                weight: 1.0,
+                fillOpacity: 0,
+                interactive: true,
+            }
+                    break;
+                case '3.35':
+                    return {
+                pane: 'pane_Total_Network_1',
+                opacity: 1,
+                color: 'rgba(236,82,15,1.0)',
+                dashArray: '',
+                lineCap: 'square',
+                lineJoin: 'bevel',
+                weight: 1.0,
+                fillOpacity: 0,
+                interactive: true,
+            }
+                    break;
+                case '3.5':
+                    return {
+                pane: 'pane_Total_Network_1',
+                opacity: 1,
+                color: 'rgba(233,77,13,1.0)',
+                dashArray: '',
+                lineCap: 'square',
+                lineJoin: 'bevel',
+                weight: 1.0,
+                fillOpacity: 0,
+                interactive: true,
+            }
+                    break;
+                case '3.6':
+                    return {
+                pane: 'pane_Total_Network_1',
+                opacity: 1,
+                color: 'rgba(230,72,12,1.0)',
+                dashArray: '',
+                lineCap: 'square',
+                lineJoin: 'bevel',
+                weight: 1.0,
+                fillOpacity: 0,
+                interactive: true,
+            }
+                    break;
+                case '3.65':
+                    return {
+                pane: 'pane_Total_Network_1',
+                opacity: 1,
+                color: 'rgba(227,68,10,1.0)',
+                dashArray: '',
+                lineCap: 'square',
+                lineJoin: 'bevel',
+                weight: 1.0,
+                fillOpacity: 0,
+                interactive: true,
+            }
+                    break;
+                case '3.7':
+                    return {
+                pane: 'pane_Total_Network_1',
+                opacity: 1,
+                color: 'rgba(224,64,9,1.0)',
+                dashArray: '',
+                lineCap: 'square',
+                lineJoin: 'bevel',
+                weight: 1.0,
+                fillOpacity: 0,
+                interactive: true,
+            }
+                    break;
+                case '3.75':
+                    return {
+                pane: 'pane_Total_Network_1',
+                opacity: 1,
+                color: 'rgba(221,60,8,1.0)',
+                dashArray: '',
+                lineCap: 'square',
+                lineJoin: 'bevel',
+                weight: 1.0,
+                fillOpacity: 0,
+                interactive: true,
+            }
+                    break;
+                case '3.8':
+                    return {
+                pane: 'pane_Total_Network_1',
+                opacity: 1,
+                color: 'rgba(217,56,7,1.0)',
+                dashArray: '',
+                lineCap: 'square',
+                lineJoin: 'bevel',
+                weight: 1.0,
+                fillOpacity: 0,
+                interactive: true,
+            }
+                    break;
+                case '4.0':
+                    return {
+                pane: 'pane_Total_Network_1',
+                opacity: 1,
+                color: 'rgba(213,52,6,1.0)',
+                dashArray: '',
+                lineCap: 'square',
+                lineJoin: 'bevel',
+                weight: 1.0,
+                fillOpacity: 0,
+                interactive: true,
+            }
+                    break;
+                case '4.07':
+                    return {
+                pane: 'pane_Total_Network_1',
+                opacity: 1,
+                color: 'rgba(209,48,5,1.0)',
+                dashArray: '',
+                lineCap: 'square',
+                lineJoin: 'bevel',
+                weight: 1.0,
+                fillOpacity: 0,
+                interactive: true,
+            }
+                    break;
+                case '4.2':
+                    return {
+                pane: 'pane_Total_Network_1',
+                opacity: 1,
+                color: 'rgba(205,44,4,1.0)',
+                dashArray: '',
+                lineCap: 'square',
+                lineJoin: 'bevel',
+                weight: 1.0,
+                fillOpacity: 0,
+                interactive: true,
+            }
+                    break;
+                case '4.4':
+                    return {
+                pane: 'pane_Total_Network_1',
+                opacity: 1,
+                color: 'rgba(201,41,3,1.0)',
+                dashArray: '',
+                lineCap: 'square',
+                lineJoin: 'bevel',
+                weight: 1.0,
+                fillOpacity: 0,
+                interactive: true,
+            }
+                    break;
+                case '4.483':
+                    return {
+                pane: 'pane_Total_Network_1',
+                opacity: 1,
+                color: 'rgba(196,37,3,1.0)',
+                dashArray: '',
+                lineCap: 'square',
+                lineJoin: 'bevel',
+                weight: 1.0,
+                fillOpacity: 0,
+                interactive: true,
+            }
+                    break;
+                case '4.77':
+                    return {
+                pane: 'pane_Total_Network_1',
+                opacity: 1,
+                color: 'rgba(191,34,2,1.0)',
+                dashArray: '',
+                lineCap: 'square',
+                lineJoin: 'bevel',
+                weight: 1.0,
+                fillOpacity: 0,
+                interactive: true,
+            }
+                    break;
+                case '4.8':
+                    return {
+                pane: 'pane_Total_Network_1',
+                opacity: 1,
+                color: 'rgba(186,31,2,1.0)',
+                dashArray: '',
+                lineCap: 'square',
+                lineJoin: 'bevel',
+                weight: 1.0,
+                fillOpacity: 0,
+                interactive: true,
+            }
+                    break;
+                case '4.92':
+                    return {
+                pane: 'pane_Total_Network_1',
+                opacity: 1,
+                color: 'rgba(181,28,1,1.0)',
+                dashArray: '',
+                lineCap: 'square',
+                lineJoin: 'bevel',
+                weight: 1.0,
+                fillOpacity: 0,
+                interactive: true,
+            }
+                    break;
+                case '5.0':
+                    return {
+                pane: 'pane_Total_Network_1',
+                opacity: 1,
+                color: 'rgba(176,25,1,1.0)',
+                dashArray: '',
+                lineCap: 'square',
+                lineJoin: 'bevel',
+                weight: 1.0,
+                fillOpacity: 0,
+                interactive: true,
+            }
+                    break;
+                case '5.2':
+                    return {
+                pane: 'pane_Total_Network_1',
+                opacity: 1,
+                color: 'rgba(170,22,1,1.0)',
+                dashArray: '',
+                lineCap: 'square',
+                lineJoin: 'bevel',
+                weight: 1.0,
+                fillOpacity: 0,
+                interactive: true,
+            }
+                    break;
+                case '5.73':
+                    return {
+                pane: 'pane_Total_Network_1',
+                opacity: 1,
+                color: 'rgba(165,19,1,1.0)',
+                dashArray: '',
+                lineCap: 'square',
+                lineJoin: 'bevel',
+                weight: 1.0,
+                fillOpacity: 0,
+                interactive: true,
+            }
+                    break;
+                case '6.75':
+                    return {
+                pane: 'pane_Total_Network_1',
+                opacity: 1,
+                color: 'rgba(159,16,1,1.0)',
+                dashArray: '',
+                lineCap: 'square',
+                lineJoin: 'bevel',
+                weight: 1.0,
+                fillOpacity: 0,
+                interactive: true,
+            }
+                    break;
+                case '7.0':
+                    return {
+                pane: 'pane_Total_Network_1',
+                opacity: 1,
+                color: 'rgba(152,14,1,1.0)',
+                dashArray: '',
+                lineCap: 'square',
+                lineJoin: 'bevel',
+                weight: 1.0,
+                fillOpacity: 0,
+                interactive: true,
+            }
+                    break;
+                case '7.5':
+                    return {
+                pane: 'pane_Total_Network_1',
+                opacity: 1,
+                color: 'rgba(146,11,1,1.0)',
+                dashArray: '',
+                lineCap: 'square',
+                lineJoin: 'bevel',
+                weight: 1.0,
+                fillOpacity: 0,
+                interactive: true,
+            }
+                    break;
+                case '8.1':
+                    return {
+                pane: 'pane_Total_Network_1',
+                opacity: 1,
+                color: 'rgba(139,9,2,1.0)',
+                dashArray: '',
+                lineCap: 'square',
+                lineJoin: 'bevel',
+                weight: 1.0,
+                fillOpacity: 0,
+                interactive: true,
+            }
+                    break;
+                case '9.55':
+                    return {
+                pane: 'pane_Total_Network_1',
+                opacity: 1,
+                color: 'rgba(133,7,2,1.0)',
+                dashArray: '',
+                lineCap: 'square',
+                lineJoin: 'bevel',
+                weight: 1.0,
+                fillOpacity: 0,
+                interactive: true,
+            }
+                    break;
+                case '13.0':
+                    return {
+                pane: 'pane_Total_Network_1',
+                opacity: 1,
+                color: 'rgba(127,5,2,1.0)',
+                dashArray: '',
+                lineCap: 'round',
+                lineJoin: 'round',
+                weight: 3.0,
+                fillOpacity: 0,
+                interactive: true,
+            }
+                    break;
+                default:
+                    return {
+                pane: 'pane_Total_Network_1',
+                opacity: 1,
+                color: 'rgba(122,4,3,1.0)',
+                dashArray: '',
+                lineCap: 'square',
+                lineJoin: 'bevel',
+                weight: 1.0,
+                fillOpacity: 0,
+                interactive: true,
+            }
+                    break;
+            }
+        }
+        map.createPane('pane_Total_Network_1');
+        map.getPane('pane_Total_Network_1').style.zIndex = 401;
+        map.getPane('pane_Total_Network_1').style['mix-blend-mode'] = 'normal';
+        var layer_Total_Network_1 = new L.geoJson(json_Total_Network_1, {
+            attribution: '',
+            interactive: true,
+            dataVar: 'json_Total_Network_1',
+            layerName: 'layer_Total_Network_1',
+            pane: 'pane_Total_Network_1',
+            onEachFeature: pop_Total_Network_1,
+            style: style_Total_Network_1_0,
+        });
+        bounds_group.addLayer(layer_Total_Network_1);
+        map.addLayer(layer_Total_Network_1);
+            var title = new L.Control();
+            title.onAdd = function (map) {
+                this._div = L.DomUtil.create('div', 'info');
+                this.update();
+                return this._div;
+            };
+            title.update = function () {
+                this._div.innerHTML = '<h2>Northeast Corridor Webtool</h2>';
+            };
+            title.addTo(map);
+        setBounds();
+        </script>
+    </body>
+</html>
