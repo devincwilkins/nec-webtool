@@ -1,0 +1,727 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="initial-scale=1,user-scalable=no,maximum-scale=1,width=device-width">
+        <meta name="mobile-web-app-capable" content="yes">
+        <meta name="apple-mobile-web-app-capable" content="yes">
+        <link rel="stylesheet" href="css/leaflet.css">
+        <link rel="stylesheet" href="css/L.Control.Layers.Tree.css">
+        <link rel="stylesheet" href="css/qgis2web.css">
+        <link rel="stylesheet" href="css/fontawesome-all.min.css">
+        <link rel="stylesheet" href="css/filter.css">
+<link rel="stylesheet" href="css/nouislider.min.css">
+        <style>
+        html, body, #map {
+            width: 100%;
+            height: 100%;
+            padding: 0;
+            margin: 0;
+        }
+        </style>
+        <title>Northeast Corridor Webtool</title>
+    </head>
+    <body>
+        <div id="map">
+        </div>
+        <script src="js/qgis2web_expressions.js"></script>
+        <script src="js/leaflet.js"></script>
+        <script src="js/L.Control.Layers.Tree.min.js"></script>
+        <script src="js/leaflet.rotatedMarker.js"></script>
+        <script src="js/leaflet.pattern.js"></script>
+        <script src="js/leaflet-hash.js"></script>
+        <script src="js/Autolinker.min.js"></script>
+        <script src="js/rbush.min.js"></script>
+        <script src="js/labelgun.min.js"></script>
+        <script src="js/labels.js"></script>
+        <script src="js/tailDT.js"></script>
+<script src="js/nouislider.min.js"></script>
+<script src="js/wNumb.js"></script>
+        <script src="data/Total_Network_1.js"></script>
+        <script>
+        var highlightLayer;
+        function highlightFeature(e) {
+            highlightLayer = e.target;
+
+            if (e.target.feature.geometry.type === 'LineString' || e.target.feature.geometry.type === 'MultiLineString') {
+              highlightLayer.setStyle({
+                color: '#00fff7',
+              });
+            } else {
+              highlightLayer.setStyle({
+                fillColor: '#00fff7',
+                fillOpacity: 1
+              });
+            }
+        }
+        var map = L.map('map', {
+            zoomControl:true, maxZoom:28, minZoom:1
+        }).fitBounds([[38.72881155051151,-77.86686511498858],[42.61378004705552,-69.02877667631984]]);
+        var hash = new L.Hash(map);
+        map.attributionControl.setPrefix('<a href="https://github.com/tomchadwin/qgis2web" target="_blank">qgis2web</a> &middot; <a href="https://leafletjs.com" title="A JS library for interactive maps">Leaflet</a> &middot; <a href="https://qgis.org">QGIS</a>');
+        var autolinker = new Autolinker({truncate: {length: 30, location: 'smart'}});
+        function removeEmptyRowsFromPopupContent(content, feature) {
+         var tempDiv = document.createElement('div');
+         tempDiv.innerHTML = content;
+         var rows = tempDiv.querySelectorAll('tr');
+         for (var i = 0; i < rows.length; i++) {
+             var td = rows[i].querySelector('td.visible-with-data');
+             var key = td ? td.id : '';
+             if (td && td.classList.contains('visible-with-data') && feature.properties[key] == null) {
+                 rows[i].parentNode.removeChild(rows[i]);
+             }
+         }
+         return tempDiv.innerHTML;
+        }
+        document.querySelector(".leaflet-popup-pane").addEventListener("load", function(event) {
+          var tagName = event.target.tagName,
+            popup = map._popup;
+          // Also check if flag is already set.
+          if (tagName === "IMG" && popup && !popup._updated) {
+            popup._updated = true; // Set flag to prevent looping.
+            popup.update();
+          }
+        }, true);
+        var bounds_group = new L.featureGroup([]);
+        function setBounds() {
+            map.setMaxBounds(map.getBounds());
+        }
+        map.createPane('pane_Positron_0');
+        map.getPane('pane_Positron_0').style.zIndex = 400;
+        var layer_Positron_0 = L.tileLayer('https://a.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png', {
+            pane: 'pane_Positron_0',
+            opacity: 1.0,
+            attribution: '<a href="https://cartodb.com/basemaps/">Map tiles by CartoDB, under CC BY 3.0. Data by OpenStreetMap, under ODbL.</a>',
+            minZoom: 1,
+            maxZoom: 28,
+            minNativeZoom: 0,
+            maxNativeZoom: 20
+        });
+        layer_Positron_0;
+        map.addLayer(layer_Positron_0);
+        function pop_Total_Network_1(feature, layer) {
+            layer.on({
+                mouseout: function(e) {
+                    for (var i in e.target._eventParents) {
+                        if (typeof e.target._eventParents[i].resetStyle === 'function') {
+                            e.target._eventParents[i].resetStyle(e.target);
+                        }
+                    }
+                },
+                mouseover: highlightFeature,
+            });
+            var popupContent = '<table>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['id'] !== null ? autolinker.link(feature.properties['id'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['service'] !== null ? autolinker.link(feature.properties['service'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['railway_tr'] !== null ? autolinker.link(feature.properties['railway_tr'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['maxspeed'] !== null ? autolinker.link(feature.properties['maxspeed'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['layer'] !== null ? autolinker.link(feature.properties['layer'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['full_id'] !== null ? autolinker.link(feature.properties['full_id'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['osm_id'] !== null ? autolinker.link(feature.properties['osm_id'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['osm_type'] !== null ? autolinker.link(feature.properties['osm_type'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['railway'] !== null ? autolinker.link(feature.properties['railway'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['usage'] !== null ? autolinker.link(feature.properties['usage'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['name'] !== null ? autolinker.link(feature.properties['name'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['operator'] !== null ? autolinker.link(feature.properties['operator'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['gauge'] !== null ? autolinker.link(feature.properties['gauge'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['electrifie'] !== null ? autolinker.link(feature.properties['electrifie'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['export'] !== null ? autolinker.link(feature.properties['export'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['track_id'] !== null ? autolinker.link(feature.properties['track_id'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['30thSt'] !== null ? autolinker.link(feature.properties['30thSt'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['Alternativ'] !== null ? autolinker.link(feature.properties['Alternativ'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['group'] !== null ? autolinker.link(feature.properties['group'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['radius'] !== null ? autolinker.link(feature.properties['radius'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['path'] !== null ? autolinker.link(feature.properties['path'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">doc</th>\
+                        <td>' + (feature.properties['doc'] !== null ? autolinker.link(feature.properties['doc'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['UID'] !== null ? autolinker.link(feature.properties['UID'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['curve_id'] !== null ? autolinker.link(feature.properties['curve_id'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['length'] !== null ? autolinker.link(feature.properties['length'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['NHL_PS_exp'] !== null ? autolinker.link(feature.properties['NHL_PS_exp'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['link_new'] !== null ? autolinker.link(feature.properties['link_new'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                </table>';
+            layer.bindPopup(popupContent, {maxHeight: 400});
+            var popup = layer.getPopup();
+            var content = popup.getContent();
+            var updatedContent = removeEmptyRowsFromPopupContent(content, feature);
+            popup.setContent(updatedContent);
+        }
+
+        function style_Total_Network_1_0(feature) {
+            if (feature.properties['doc'] >= 0.000000 && feature.properties['doc'] <= 0.500000 ) {
+                return {
+                pane: 'pane_Total_Network_1',
+                opacity: 1,
+                color: 'rgba(48,18,59,1.0)',
+                dashArray: '',
+                lineCap: 'square',
+                lineJoin: 'bevel',
+                weight: 1.0,
+                fillOpacity: 0,
+                interactive: true,
+            }
+            }
+            if (feature.properties['doc'] >= 0.500000 && feature.properties['doc'] <= 1.000000 ) {
+                return {
+                pane: 'pane_Total_Network_1',
+                opacity: 1,
+                color: 'rgba(59,48,129,1.0)',
+                dashArray: '',
+                lineCap: 'square',
+                lineJoin: 'bevel',
+                weight: 1.0,
+                fillOpacity: 0,
+                interactive: true,
+            }
+            }
+            if (feature.properties['doc'] >= 1.000000 && feature.properties['doc'] <= 1.500000 ) {
+                return {
+                pane: 'pane_Total_Network_1',
+                opacity: 1,
+                color: 'rgba(66,76,183,1.0)',
+                dashArray: '',
+                lineCap: 'square',
+                lineJoin: 'bevel',
+                weight: 1.0,
+                fillOpacity: 0,
+                interactive: true,
+            }
+            }
+            if (feature.properties['doc'] >= 1.500000 && feature.properties['doc'] <= 2.000000 ) {
+                return {
+                pane: 'pane_Total_Network_1',
+                opacity: 1,
+                color: 'rgba(70,104,223,1.0)',
+                dashArray: '',
+                lineCap: 'square',
+                lineJoin: 'bevel',
+                weight: 1.0,
+                fillOpacity: 0,
+                interactive: true,
+            }
+            }
+            if (feature.properties['doc'] >= 2.000000 && feature.properties['doc'] <= 2.500000 ) {
+                return {
+                pane: 'pane_Total_Network_1',
+                opacity: 1,
+                color: 'rgba(70,130,248,1.0)',
+                dashArray: '',
+                lineCap: 'square',
+                lineJoin: 'bevel',
+                weight: 1.0,
+                fillOpacity: 0,
+                interactive: true,
+            }
+            }
+            if (feature.properties['doc'] >= 2.500000 && feature.properties['doc'] <= 3.000000 ) {
+                return {
+                pane: 'pane_Total_Network_1',
+                opacity: 1,
+                color: 'rgba(62,156,254,1.0)',
+                dashArray: '',
+                lineCap: 'square',
+                lineJoin: 'bevel',
+                weight: 1.0,
+                fillOpacity: 0,
+                interactive: true,
+            }
+            }
+            if (feature.properties['doc'] >= 3.000000 && feature.properties['doc'] <= 3.500000 ) {
+                return {
+                pane: 'pane_Total_Network_1',
+                opacity: 1,
+                color: 'rgba(45,181,241,1.0)',
+                dashArray: '',
+                lineCap: 'square',
+                lineJoin: 'bevel',
+                weight: 1.0,
+                fillOpacity: 0,
+                interactive: true,
+            }
+            }
+            if (feature.properties['doc'] >= 3.500000 && feature.properties['doc'] <= 4.000000 ) {
+                return {
+                pane: 'pane_Total_Network_1',
+                opacity: 1,
+                color: 'rgba(29,204,217,1.0)',
+                dashArray: '',
+                lineCap: 'square',
+                lineJoin: 'bevel',
+                weight: 1.0,
+                fillOpacity: 0,
+                interactive: true,
+            }
+            }
+            if (feature.properties['doc'] >= 4.000000 && feature.properties['doc'] <= 4.500000 ) {
+                return {
+                pane: 'pane_Total_Network_1',
+                opacity: 1,
+                color: 'rgba(24,224,189,1.0)',
+                dashArray: '',
+                lineCap: 'square',
+                lineJoin: 'bevel',
+                weight: 1.0,
+                fillOpacity: 0,
+                interactive: true,
+            }
+            }
+            if (feature.properties['doc'] >= 4.500000 && feature.properties['doc'] <= 5.000000 ) {
+                return {
+                pane: 'pane_Total_Network_1',
+                opacity: 1,
+                color: 'rgba(39,238,164,1.0)',
+                dashArray: '',
+                lineCap: 'square',
+                lineJoin: 'bevel',
+                weight: 1.0,
+                fillOpacity: 0,
+                interactive: true,
+            }
+            }
+            if (feature.properties['doc'] >= 5.000000 && feature.properties['doc'] <= 5.500000 ) {
+                return {
+                pane: 'pane_Total_Network_1',
+                opacity: 1,
+                color: 'rgba(72,248,130,1.0)',
+                dashArray: '',
+                lineCap: 'square',
+                lineJoin: 'bevel',
+                weight: 1.0,
+                fillOpacity: 0,
+                interactive: true,
+            }
+            }
+            if (feature.properties['doc'] >= 5.500000 && feature.properties['doc'] <= 6.000000 ) {
+                return {
+                pane: 'pane_Total_Network_1',
+                opacity: 1,
+                color: 'rgba(112,254,96,1.0)',
+                dashArray: '',
+                lineCap: 'square',
+                lineJoin: 'bevel',
+                weight: 1.0,
+                fillOpacity: 0,
+                interactive: true,
+            }
+            }
+            if (feature.properties['doc'] >= 6.000000 && feature.properties['doc'] <= 6.500000 ) {
+                return {
+                pane: 'pane_Total_Network_1',
+                opacity: 1,
+                color: 'rgba(150,254,68,1.0)',
+                dashArray: '',
+                lineCap: 'square',
+                lineJoin: 'bevel',
+                weight: 1.0,
+                fillOpacity: 0,
+                interactive: true,
+            }
+            }
+            if (feature.properties['doc'] >= 6.500000 && feature.properties['doc'] <= 7.000000 ) {
+                return {
+                pane: 'pane_Total_Network_1',
+                opacity: 1,
+                color: 'rgba(177,249,54,1.0)',
+                dashArray: '',
+                lineCap: 'square',
+                lineJoin: 'bevel',
+                weight: 1.0,
+                fillOpacity: 0,
+                interactive: true,
+            }
+            }
+            if (feature.properties['doc'] >= 7.000000 && feature.properties['doc'] <= 7.500000 ) {
+                return {
+                pane: 'pane_Total_Network_1',
+                opacity: 1,
+                color: 'rgba(204,237,52,1.0)',
+                dashArray: '',
+                lineCap: 'square',
+                lineJoin: 'bevel',
+                weight: 1.0,
+                fillOpacity: 0,
+                interactive: true,
+            }
+            }
+            if (feature.properties['doc'] >= 7.500000 && feature.properties['doc'] <= 8.000000 ) {
+                return {
+                pane: 'pane_Total_Network_1',
+                opacity: 1,
+                color: 'rgba(226,220,56,1.0)',
+                dashArray: '',
+                lineCap: 'square',
+                lineJoin: 'bevel',
+                weight: 1.0,
+                fillOpacity: 0,
+                interactive: true,
+            }
+            }
+            if (feature.properties['doc'] >= 8.000000 && feature.properties['doc'] <= 8.500000 ) {
+                return {
+                pane: 'pane_Total_Network_1',
+                opacity: 1,
+                color: 'rgba(244,199,58,1.0)',
+                dashArray: '',
+                lineCap: 'square',
+                lineJoin: 'bevel',
+                weight: 1.0,
+                fillOpacity: 0,
+                interactive: true,
+            }
+            }
+            if (feature.properties['doc'] >= 8.500000 && feature.properties['doc'] <= 9.000000 ) {
+                return {
+                pane: 'pane_Total_Network_1',
+                opacity: 1,
+                color: 'rgba(252,177,54,1.0)',
+                dashArray: '',
+                lineCap: 'square',
+                lineJoin: 'bevel',
+                weight: 1.0,
+                fillOpacity: 0,
+                interactive: true,
+            }
+            }
+            if (feature.properties['doc'] >= 9.000000 && feature.properties['doc'] <= 9.500000 ) {
+                return {
+                pane: 'pane_Total_Network_1',
+                opacity: 1,
+                color: 'rgba(254,149,43,1.0)',
+                dashArray: '',
+                lineCap: 'square',
+                lineJoin: 'bevel',
+                weight: 1.0,
+                fillOpacity: 0,
+                interactive: true,
+            }
+            }
+            if (feature.properties['doc'] >= 9.500000 && feature.properties['doc'] <= 10.000000 ) {
+                return {
+                pane: 'pane_Total_Network_1',
+                opacity: 1,
+                color: 'rgba(249,118,29,1.0)',
+                dashArray: '',
+                lineCap: 'square',
+                lineJoin: 'bevel',
+                weight: 1.0,
+                fillOpacity: 0,
+                interactive: true,
+            }
+            }
+            if (feature.properties['doc'] >= 10.000000 && feature.properties['doc'] <= 10.500000 ) {
+                return {
+                pane: 'pane_Total_Network_1',
+                opacity: 1,
+                color: 'rgba(239,89,17,1.0)',
+                dashArray: '',
+                lineCap: 'square',
+                lineJoin: 'bevel',
+                weight: 1.0,
+                fillOpacity: 0,
+                interactive: true,
+            }
+            }
+            if (feature.properties['doc'] >= 10.500000 && feature.properties['doc'] <= 11.000000 ) {
+                return {
+                pane: 'pane_Total_Network_1',
+                opacity: 1,
+                color: 'rgba(225,65,9,1.0)',
+                dashArray: '',
+                lineCap: 'square',
+                lineJoin: 'bevel',
+                weight: 1.0,
+                fillOpacity: 0,
+                interactive: true,
+            }
+            }
+            if (feature.properties['doc'] >= 11.000000 && feature.properties['doc'] <= 11.500000 ) {
+                return {
+                pane: 'pane_Total_Network_1',
+                opacity: 1,
+                color: 'rgba(205,44,4,1.0)',
+                dashArray: '',
+                lineCap: 'square',
+                lineJoin: 'bevel',
+                weight: 1.0,
+                fillOpacity: 0,
+                interactive: true,
+            }
+            }
+            if (feature.properties['doc'] >= 11.500000 && feature.properties['doc'] <= 12.000000 ) {
+                return {
+                pane: 'pane_Total_Network_1',
+                opacity: 1,
+                color: 'rgba(181,28,1,1.0)',
+                dashArray: '',
+                lineCap: 'square',
+                lineJoin: 'bevel',
+                weight: 1.0,
+                fillOpacity: 0,
+                interactive: true,
+            }
+            }
+            if (feature.properties['doc'] >= 12.000000 && feature.properties['doc'] <= 12.500000 ) {
+                return {
+                pane: 'pane_Total_Network_1',
+                opacity: 1,
+                color: 'rgba(153,14,1,1.0)',
+                dashArray: '',
+                lineCap: 'square',
+                lineJoin: 'bevel',
+                weight: 1.0,
+                fillOpacity: 0,
+                interactive: true,
+            }
+            }
+            if (feature.properties['doc'] >= 12.500000 && feature.properties['doc'] <= 13.000000 ) {
+                return {
+                pane: 'pane_Total_Network_1',
+                opacity: 1,
+                color: 'rgba(255,255,255,0.0)',
+                dashArray: '',
+                lineCap: 'square',
+                lineJoin: 'bevel',
+                weight: 1.0,
+                fillOpacity: 0,
+                interactive: true,
+            }
+            }
+        }
+        map.createPane('pane_Total_Network_1');
+        map.getPane('pane_Total_Network_1').style.zIndex = 401;
+        map.getPane('pane_Total_Network_1').style['mix-blend-mode'] = 'normal';
+        var layer_Total_Network_1 = new L.geoJson(json_Total_Network_1, {
+            attribution: '',
+            interactive: true,
+            dataVar: 'json_Total_Network_1',
+            layerName: 'layer_Total_Network_1',
+            pane: 'pane_Total_Network_1',
+            onEachFeature: pop_Total_Network_1,
+            style: style_Total_Network_1_0,
+        });
+        bounds_group.addLayer(layer_Total_Network_1);
+        map.addLayer(layer_Total_Network_1);
+            var title = new L.Control();
+            title.onAdd = function (map) {
+                this._div = L.DomUtil.create('div', 'info');
+                this.update();
+                return this._div;
+            };
+            title.update = function () {
+                this._div.innerHTML = '<h2>Northeast Corridor Webtool</h2>';
+            };
+            title.addTo(map);
+        var baseMaps = {};
+        var overlaysTree = [
+            {label: 'Total_Network<br /><table><tr><td style="text-align: center;"><img src="legend/Total_Network_1_0050.png" /></td><td>0 - 0.5</td></tr><tr><td style="text-align: center;"><img src="legend/Total_Network_1_0511.png" /></td><td>0.5 - 1</td></tr><tr><td style="text-align: center;"><img src="legend/Total_Network_1_1152.png" /></td><td>1 - 1.5</td></tr><tr><td style="text-align: center;"><img src="legend/Total_Network_1_1523.png" /></td><td>1.5 - 2</td></tr><tr><td style="text-align: center;"><img src="legend/Total_Network_1_2254.png" /></td><td>2 - 2.5</td></tr><tr><td style="text-align: center;"><img src="legend/Total_Network_1_2535.png" /></td><td>2.5 - 3</td></tr><tr><td style="text-align: center;"><img src="legend/Total_Network_1_3356.png" /></td><td>3 - 3.5</td></tr><tr><td style="text-align: center;"><img src="legend/Total_Network_1_3547.png" /></td><td>3.5 - 4</td></tr><tr><td style="text-align: center;"><img src="legend/Total_Network_1_4458.png" /></td><td>4 - 4.5</td></tr><tr><td style="text-align: center;"><img src="legend/Total_Network_1_4559.png" /></td><td>4.5 - 5</td></tr><tr><td style="text-align: center;"><img src="legend/Total_Network_1_55510.png" /></td><td>5 - 5.5</td></tr><tr><td style="text-align: center;"><img src="legend/Total_Network_1_55611.png" /></td><td>5.5 - 6</td></tr><tr><td style="text-align: center;"><img src="legend/Total_Network_1_66512.png" /></td><td>6 - 6.5</td></tr><tr><td style="text-align: center;"><img src="legend/Total_Network_1_65713.png" /></td><td>6.5 - 7</td></tr><tr><td style="text-align: center;"><img src="legend/Total_Network_1_77514.png" /></td><td>7 - 7.5</td></tr><tr><td style="text-align: center;"><img src="legend/Total_Network_1_75815.png" /></td><td>7.5 - 8</td></tr><tr><td style="text-align: center;"><img src="legend/Total_Network_1_88516.png" /></td><td>8 - 8.5</td></tr><tr><td style="text-align: center;"><img src="legend/Total_Network_1_85917.png" /></td><td>8.5 - 9</td></tr><tr><td style="text-align: center;"><img src="legend/Total_Network_1_99518.png" /></td><td>9 - 9.5</td></tr><tr><td style="text-align: center;"><img src="legend/Total_Network_1_951019.png" /></td><td>9.5 - 10</td></tr><tr><td style="text-align: center;"><img src="legend/Total_Network_1_1010520.png" /></td><td>10 - 10.5</td></tr><tr><td style="text-align: center;"><img src="legend/Total_Network_1_1051121.png" /></td><td>10.5 - 11</td></tr><tr><td style="text-align: center;"><img src="legend/Total_Network_1_1111522.png" /></td><td>11 - 11.5</td></tr><tr><td style="text-align: center;"><img src="legend/Total_Network_1_1151223.png" /></td><td>11.5 - 12</td></tr><tr><td style="text-align: center;"><img src="legend/Total_Network_1_1212524.png" /></td><td>12 - 12.5</td></tr><tr><td style="text-align: center;"><img src="legend/Total_Network_1_1251325.png" /></td><td>12.5 - 13</td></tr></table>', layer: layer_Total_Network_1},
+            {label: "Positron", layer: layer_Positron_0},]
+        var lay = L.control.layers.tree(null, overlaysTree,{
+            //namedToggle: true,
+            //selectorBack: false,
+            //closedSymbol: '&#8862; &#x1f5c0;',
+            //openedSymbol: '&#8863; &#x1f5c1;',
+            //collapseAll: 'Collapse all',
+            //expandAll: 'Expand all',
+            collapsed: true,
+        });
+        lay.addTo(map);
+        setBounds();
+        var mapDiv = document.getElementById('map');
+        var row = document.createElement('div');
+        row.className="row";
+        row.id="all";
+        row.style.height = "100%";
+        var col1 = document.createElement('div');
+        col1.className="col9";
+        col1.id = "mapWindow";
+        col1.style.height = "99%";
+        col1.style.width = "80%";
+        col1.style.display = "inline-block";
+        var col2 = document.createElement('div');
+        col2.className="col3";
+        col2.id = "menu";
+        col2.style.display = "inline-block";
+        mapDiv.parentNode.insertBefore(row, mapDiv);
+        document.getElementById("all").appendChild(col1);
+        document.getElementById("all").appendChild(col2);
+        col1.appendChild(mapDiv)
+        var Filters = {"doc": "real"};
+        function filterFunc() {
+          map.eachLayer(function(lyr){
+          if ("options" in lyr && "dataVar" in lyr["options"]){
+            features = this[lyr["options"]["dataVar"]].features.slice(0);
+            try{
+              for (key in Filters){
+                keyS = key.replace(/[^a-zA-Z0-9_]/g, "")
+                if (Filters[key] == "str" || Filters[key] == "bool"){
+                  var selection = [];
+                  var options = document.getElementById("sel_" + keyS).options
+                  for (var i=0; i < options.length; i++) {
+                    if (options[i].selected) selection.push(options[i].value);
+                  }
+                    try{
+                      if (key in features[0].properties){
+                        for (i = features.length - 1;
+                          i >= 0; --i){
+                          if (selection.indexOf(
+                          features[i].properties[key])<0
+                          && selection.length>0) {
+                          features.splice(i,1);
+                          }
+                        }
+                      }
+                    } catch(err){
+                  }
+                }
+                if (Filters[key] == "int"){
+                  sliderVals =  document.getElementById(
+                    "div_" + keyS).noUiSlider.get();
+                  try{
+                    if (key in features[0].properties){
+                    for (i = features.length - 1; i >= 0; --i){
+                      if (parseInt(features[i].properties[key])
+                          < sliderVals[0]
+                          || parseInt(features[i].properties[key])
+                          > sliderVals[1]){
+                            features.splice(i,1);
+                          }
+                        }
+                      }
+                    } catch(err){
+                    }
+                  }
+                if (Filters[key] == "real"){
+                  sliderVals =  document.getElementById(
+                    "div_" + keyS).noUiSlider.get();
+                  try{
+                    if (key in features[0].properties){
+                    for (i = features.length - 1; i >= 0; --i){
+                      if (features[i].properties[key]
+                          < sliderVals[0]
+                          || features[i].properties[key]
+                          > sliderVals[1]){
+                            features.splice(i,1);
+                          }
+                        }
+                      }
+                    } catch(err){
+                    }
+                  }
+                if (Filters[key] == "date"
+                  || Filters[key] == "datetime"
+                  || Filters[key] == "time"){
+                  try{
+                    if (key in features[0].properties){
+                      HTMLkey = key.replace(/[&\/\\#,+()$~%.'":*?<>{} ]/g, '');
+                      startdate = document.getElementById("dat_" +
+                        HTMLkey + "_date1").value.replace(" ", "T");
+                      enddate = document.getElementById("dat_" +
+                        HTMLkey + "_date2").value.replace(" ", "T");
+                      for (i = features.length - 1; i >= 0; --i){
+                        if (features[i].properties[key] < startdate
+                          || features[i].properties[key] > enddate){
+                          features.splice(i,1);
+                        }
+                      }
+                    }
+                  } catch(err){
+                  }
+                }
+              }
+            } catch(err){
+            }
+          this[lyr["options"]["layerName"]].clearLayers();
+          this[lyr["options"]["layerName"]].addData(features);
+          }
+          })
+        }
+            document.getElementById("menu").appendChild(
+                document.createElement("div"));
+            var div_doc = document.createElement("div");
+            div_doc.id = "div_doc";
+            div_doc.className = "slider";
+            document.getElementById("menu").appendChild(div_doc);
+            var lab_doc = document.createElement('div');
+            lab_doc.innerHTML  = 'doc: <span id="val_doc"></span>';
+            lab_doc.className = 'filterlabel';
+            document.getElementById("menu").appendChild(lab_doc);
+            var reset_doc = document.createElement('div');
+            reset_doc.innerHTML = 'clear filter';
+            reset_doc.className = 'filterlabel';
+            lab_doc.className = 'filterlabel';
+            reset_doc.onclick = function() {
+                sel_doc.noUiSlider.reset();
+            };
+            document.getElementById("menu").appendChild(reset_doc);
+            var sel_doc = document.getElementById('div_doc');
+            noUiSlider.create(sel_doc, {
+                connect: true,
+                start: [0.07, 13.0],
+                range: {
+                min: 0.07,
+                max: 13.0
+                }
+            });
+            sel_doc.noUiSlider.on('update', function (values) {
+            val_doc = document.getElementById('val_doc');
+            val_doc.innerHTML = values.join(' - ');
+                filterFunc()
+            });
+        </script>
+    </body>
+</html>
