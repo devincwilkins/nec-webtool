@@ -754,3 +754,264 @@ function fnc__specialcol_(values, context) {
 function fnc_project_color(values, context) {
     return false;
 };
+
+
+
+function exp_Total_Network_Trimmed_2rule0_eval_expression(context) {
+    // doc >= 0 AND doc <= 0.5
+
+    var feature = context.feature;
+    
+    if (feature.properties) {
+        return ((feature.properties['doc']  >= 0.0) && (feature.properties['doc']  <= 0.5));
+    } else {
+        return ((feature['doc']  >= 0.0) && (feature['doc']  <= 0.5));
+    }
+}
+
+
+function exp_Total_Network_Trimmed_2rule1_eval_expression(context) {
+    // doc > 0.5 AND doc <= 1
+
+    var feature = context.feature;
+    
+    if (feature.properties) {
+        return ((feature.properties['doc']  > 0.5) && (feature.properties['doc']  <= 1.0));
+    } else {
+        return ((feature['doc']  > 0.5) && (feature['doc']  <= 1.0));
+    }
+}
+
+
+function exp_Total_Network_Trimmed_2rule2_eval_expression(context) {
+    // doc > 1 AND doc <= 1.5
+
+    var feature = context.feature;
+    
+    if (feature.properties) {
+        return ((feature.properties['doc']  > 1.0) && (feature.properties['doc']  <= 1.5));
+    } else {
+        return ((feature['doc']  > 1.0) && (feature['doc']  <= 1.5));
+    }
+}
+
+
+function exp_Total_Network_Trimmed_2rule3_eval_expression(context) {
+    // doc > 1.5 AND doc <= 2
+
+    var feature = context.feature;
+    
+    if (feature.properties) {
+        return ((feature.properties['doc']  > 1.5) && (feature.properties['doc']  <= 2.0));
+    } else {
+        return ((feature['doc']  > 1.5) && (feature['doc']  <= 2.0));
+    }
+}
+
+
+function exp_Total_Network_Trimmed_2rule4_eval_expression(context) {
+    // doc > 2 AND doc <= 2.5
+
+    var feature = context.feature;
+    
+    if (feature.properties) {
+        return ((feature.properties['doc']  > 2.0) && (feature.properties['doc']  <= 2.5));
+    } else {
+        return ((feature['doc']  > 2.0) && (feature['doc']  <= 2.5));
+    }
+}
+
+
+function exp_Total_Network_Trimmed_2rule5_eval_expression(context) {
+    // doc > 2.5 AND doc <= 3
+
+    var feature = context.feature;
+    
+    if (feature.properties) {
+        return ((feature.properties['doc']  > 2.5) && (feature.properties['doc']  <= 3.0));
+    } else {
+        return ((feature['doc']  > 2.5) && (feature['doc']  <= 3.0));
+    }
+}
+
+
+function exp_Total_Network_Trimmed_2rule6_eval_expression(context) {
+    // doc > 3 AND doc <= 3.5
+
+    var feature = context.feature;
+    
+    if (feature.properties) {
+        return ((feature.properties['doc']  > 3.0) && (feature.properties['doc']  <= 3.5));
+    } else {
+        return ((feature['doc']  > 3.0) && (feature['doc']  <= 3.5));
+    }
+}
+
+
+function exp_Total_Network_Trimmed_2rule7_eval_expression(context) {
+    // doc > 3.5 AND doc <= 4
+
+    var feature = context.feature;
+    
+    if (feature.properties) {
+        return ((feature.properties['doc']  > 3.5) && (feature.properties['doc']  <= 4.0));
+    } else {
+        return ((feature['doc']  > 3.5) && (feature['doc']  <= 4.0));
+    }
+}
+
+
+function exp_Total_Network_Trimmed_2rule8_eval_expression(context) {
+    // doc > 4 AND doc <= 4.5
+
+    var feature = context.feature;
+    
+    if (feature.properties) {
+        return ((feature.properties['doc']  > 4.0) && (feature.properties['doc']  <= 4.5));
+    } else {
+        return ((feature['doc']  > 4.0) && (feature['doc']  <= 4.5));
+    }
+}
+
+
+function exp_Total_Network_Trimmed_2rule9_eval_expression(context) {
+    // doc > 4.5 AND doc <= 5
+
+    var feature = context.feature;
+    
+    if (feature.properties) {
+        return ((feature.properties['doc']  > 4.5) && (feature.properties['doc']  <= 5.0));
+    } else {
+        return ((feature['doc']  > 4.5) && (feature['doc']  <= 5.0));
+    }
+}
+
+
+function exp_Total_Network_Trimmed_2rule10_eval_expression(context) {
+    // doc > 5 AND doc <= 5.5
+
+    var feature = context.feature;
+    
+    if (feature.properties) {
+        return ((feature.properties['doc']  > 5.0) && (feature.properties['doc']  <= 5.5));
+    } else {
+        return ((feature['doc']  > 5.0) && (feature['doc']  <= 5.5));
+    }
+}
+
+
+function exp_Total_Network_Trimmed_2rule11_eval_expression(context) {
+    // doc > 5.5 AND doc <= 6
+
+    var feature = context.feature;
+    
+    if (feature.properties) {
+        return ((feature.properties['doc']  > 5.5) && (feature.properties['doc']  <= 6.0));
+    } else {
+        return ((feature['doc']  > 5.5) && (feature['doc']  <= 6.0));
+    }
+}
+
+
+function exp_Total_Network_Trimmed_2rule12_eval_expression(context) {
+    // doc > 6 AND doc <= 6.5
+
+    var feature = context.feature;
+    
+    if (feature.properties) {
+        return ((feature.properties['doc']  > 6.0) && (feature.properties['doc']  <= 6.5));
+    } else {
+        return ((feature['doc']  > 6.0) && (feature['doc']  <= 6.5));
+    }
+}
+
+
+function exp_Total_Network_Trimmed_2rule13_eval_expression(context) {
+    // doc > 6.5 AND doc <= 7
+
+    var feature = context.feature;
+    
+    if (feature.properties) {
+        return ((feature.properties['doc']  > 6.5) && (feature.properties['doc']  <= 7.0));
+    } else {
+        return ((feature['doc']  > 6.5) && (feature['doc']  <= 7.0));
+    }
+}
+
+
+function exp_Total_Network_Trimmed_2rule14_eval_expression(context) {
+    // doc > 7 AND doc <= 7.5
+
+    var feature = context.feature;
+    
+    if (feature.properties) {
+        return ((feature.properties['doc']  > 7.0) && (feature.properties['doc']  <= 7.5));
+    } else {
+        return ((feature['doc']  > 7.0) && (feature['doc']  <= 7.5));
+    }
+}
+
+
+function exp_Total_Network_Trimmed_2rule15_eval_expression(context) {
+    // doc > 7.5 AND doc <= 8
+
+    var feature = context.feature;
+    
+    if (feature.properties) {
+        return ((feature.properties['doc']  > 7.5) && (feature.properties['doc']  <= 8.0));
+    } else {
+        return ((feature['doc']  > 7.5) && (feature['doc']  <= 8.0));
+    }
+}
+
+
+function exp_Total_Network_Trimmed_2rule16_eval_expression(context) {
+    // doc > 8 AND doc <= 8.5
+
+    var feature = context.feature;
+    
+    if (feature.properties) {
+        return ((feature.properties['doc']  > 8.0) && (feature.properties['doc']  <= 8.5));
+    } else {
+        return ((feature['doc']  > 8.0) && (feature['doc']  <= 8.5));
+    }
+}
+
+
+function exp_Total_Network_Trimmed_2rule17_eval_expression(context) {
+    // doc > 8.5 AND doc <= 9
+
+    var feature = context.feature;
+    
+    if (feature.properties) {
+        return ((feature.properties['doc']  > 8.5) && (feature.properties['doc']  <= 9.0));
+    } else {
+        return ((feature['doc']  > 8.5) && (feature['doc']  <= 9.0));
+    }
+}
+
+
+function exp_Total_Network_Trimmed_2rule18_eval_expression(context) {
+    // doc > 9 AND doc <= 9.5
+
+    var feature = context.feature;
+    
+    if (feature.properties) {
+        return ((feature.properties['doc']  > 9.0) && (feature.properties['doc']  <= 9.5));
+    } else {
+        return ((feature['doc']  > 9.0) && (feature['doc']  <= 9.5));
+    }
+}
+
+
+function exp_Total_Network_Trimmed_2rule19_eval_expression(context) {
+    // doc > 9.5 AND doc <= 10
+
+    var feature = context.feature;
+    
+    if (feature.properties) {
+        return ((feature.properties['doc']  > 9.5) && (feature.properties['doc']  <= 10.0));
+    } else {
+        return ((feature['doc']  > 9.5) && (feature['doc']  <= 10.0));
+    }
+}
