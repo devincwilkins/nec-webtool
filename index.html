@@ -54,7 +54,7 @@
         }
         var map = L.map('map', {
             zoomControl:true, maxZoom:28, minZoom:1
-        }).fitBounds([[36.942336162635286,-79.85585759979303],[43.65365120918908,-66.02513328376511]]);
+        }).fitBounds([[37.62925010227778,-78.88878013201412],[42.80107473555362,-68.24976142737745]]);
         var hash = new L.Hash(map);
         map.attributionControl.setPrefix('<a href="https://github.com/tomchadwin/qgis2web" target="_blank">qgis2web</a> &middot; <a href="https://leafletjs.com" title="A JS library for interactive maps">Leaflet</a> &middot; <a href="https://qgis.org">QGIS</a>');
         var autolinker = new Autolinker({truncate: {length: 30, location: 'smart'}});
@@ -111,11 +111,11 @@
             var popupContent = '<table>\
                     <tr>\
                         <th scope="row">Proj_Name</th>\
-                        <td>' + (feature.properties['Proj_Name'] !== null ? autolinker.link(feature.properties['Proj_Name'].toLocaleString()) : '') + '</td>\
+                        <td class="visible-with-data" id="Proj_Name">' + (feature.properties['Proj_Name'] !== null ? autolinker.link(feature.properties['Proj_Name'].toLocaleString()) : '') + '</td>\
                     </tr>\
                     <tr>\
                         <th scope="row">Proj_Type</th>\
-                        <td>' + (feature.properties['Proj_Type'] !== null ? autolinker.link(feature.properties['Proj_Type'].toLocaleString()) : '') + '</td>\
+                        <td class="visible-with-data" id="Proj_Type">' + (feature.properties['Proj_Type'] !== null ? autolinker.link(feature.properties['Proj_Type'].toLocaleString()) : '') + '</td>\
                     </tr>\
                 </table>';
             layer.bindPopup(popupContent, {maxHeight: 400});
@@ -176,7 +176,7 @@
             var popupContent = '<table>\
                     <tr>\
                         <th scope="row">Degree of Curvature</th>\
-                        <td>' + (feature.properties['doc'] !== null ? autolinker.link(feature.properties['doc'].toLocaleString()) : '') + '</td>\
+                        <td class="visible-with-data" id="doc">' + (feature.properties['doc'] !== null ? autolinker.link(feature.properties['doc'].toLocaleString()) : '') + '</td>\
                     </tr>\
                 </table>';
             layer.bindPopup(popupContent, {maxHeight: 400});
