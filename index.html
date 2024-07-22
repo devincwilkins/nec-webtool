@@ -189,6 +189,12 @@
                         <th scope="row">Speed Allowance (km/h)</th>\
                         <td class="visible-with-data" id="speed_cr">' + (feature.properties['speed_cr'] !== null ? autolinker.link(feature.properties['speed_cr'].toLocaleString()) : '') + '</td>\
                     </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['track_num'] !== null ? autolinker.link(feature.properties['track_num'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['Section'] !== null ? autolinker.link(feature.properties['Section'].toLocaleString()) : '') + '</td>\
+                    </tr>\
                 </table>';
             layer.bindPopup(popupContent, {maxHeight: 400});
             var popup = layer.getPopup();
@@ -196,10 +202,14 @@
             var updatedContent = removeEmptyRowsFromPopupContent(content, feature);
             popup.setContent(updatedContent);
         }
-
         function style_NetworkLinks_2_0(feature) {
-            if (feature.properties['doc'] >= 0.000000 && feature.properties['doc'] <= 0.500000 ) {
-                return {
+            var context = {
+                feature: feature,
+                variables: {}
+            };
+            // Start of if blocks and style check logic
+            if (exp_NetworkLinks_2rule0_eval_expression(context)) {
+                  return {
                 pane: 'pane_NetworkLinks_2',
                 opacity: 1,
                 color: 'rgba(48,18,59,1.0)',
@@ -209,10 +219,23 @@
                 weight: 1.0,
                 fillOpacity: 0,
                 interactive: true,
-            }
-            }
-            if (feature.properties['doc'] >= 0.500000 && feature.properties['doc'] <= 1.000000 ) {
-                return {
+            };
+                }
+                else if (exp_NetworkLinks_2rule1_eval_expression(context)) {
+                  return {
+                pane: 'pane_NetworkLinks_2',
+                opacity: 1,
+                color: 'rgba(48,18,59,1.0)',
+                dashArray: '',
+                lineCap: 'square',
+                lineJoin: 'bevel',
+                weight: 1.0,
+                fillOpacity: 0,
+                interactive: true,
+            };
+                }
+                else if (exp_NetworkLinks_2rule2_eval_expression(context)) {
+                  return {
                 pane: 'pane_NetworkLinks_2',
                 opacity: 1,
                 color: 'rgba(62,57,148,1.0)',
@@ -222,10 +245,10 @@
                 weight: 1.0,
                 fillOpacity: 0,
                 interactive: true,
-            }
-            }
-            if (feature.properties['doc'] >= 1.000000 && feature.properties['doc'] <= 1.500000 ) {
-                return {
+            };
+                }
+                else if (exp_NetworkLinks_2rule3_eval_expression(context)) {
+                  return {
                 pane: 'pane_NetworkLinks_2',
                 opacity: 1,
                 color: 'rgba(69,94,211,1.0)',
@@ -235,10 +258,10 @@
                 weight: 1.0,
                 fillOpacity: 0,
                 interactive: true,
-            }
-            }
-            if (feature.properties['doc'] >= 1.500000 && feature.properties['doc'] <= 2.000000 ) {
-                return {
+            };
+                }
+                else if (exp_NetworkLinks_2rule4_eval_expression(context)) {
+                  return {
                 pane: 'pane_NetworkLinks_2',
                 opacity: 1,
                 color: 'rgba(70,129,247,1.0)',
@@ -248,10 +271,10 @@
                 weight: 1.0,
                 fillOpacity: 0,
                 interactive: true,
-            }
-            }
-            if (feature.properties['doc'] >= 2.000000 && feature.properties['doc'] <= 2.500000 ) {
-                return {
+            };
+                }
+                else if (exp_NetworkLinks_2rule5_eval_expression(context)) {
+                  return {
                 pane: 'pane_NetworkLinks_2',
                 opacity: 1,
                 color: 'rgba(58,163,252,1.0)',
@@ -261,10 +284,10 @@
                 weight: 1.0,
                 fillOpacity: 0,
                 interactive: true,
-            }
-            }
-            if (feature.properties['doc'] >= 2.500000 && feature.properties['doc'] <= 3.000000 ) {
-                return {
+            };
+                }
+                else if (exp_NetworkLinks_2rule6_eval_expression(context)) {
+                  return {
                 pane: 'pane_NetworkLinks_2',
                 opacity: 1,
                 color: 'rgba(35,196,227,1.0)',
@@ -274,10 +297,10 @@
                 weight: 1.0,
                 fillOpacity: 0,
                 interactive: true,
-            }
-            }
-            if (feature.properties['doc'] >= 3.000000 && feature.properties['doc'] <= 3.500000 ) {
-                return {
+            };
+                }
+                else if (exp_NetworkLinks_2rule7_eval_expression(context)) {
+                  return {
                 pane: 'pane_NetworkLinks_2',
                 opacity: 1,
                 color: 'rgba(24,222,192,1.0)',
@@ -287,10 +310,10 @@
                 weight: 1.0,
                 fillOpacity: 0,
                 interactive: true,
-            }
-            }
-            if (feature.properties['doc'] >= 3.500000 && feature.properties['doc'] <= 4.000000 ) {
-                return {
+            };
+                }
+                else if (exp_NetworkLinks_2rule8_eval_expression(context)) {
+                  return {
                 pane: 'pane_NetworkLinks_2',
                 opacity: 1,
                 color: 'rgba(45,240,157,1.0)',
@@ -300,10 +323,10 @@
                 weight: 1.0,
                 fillOpacity: 0,
                 interactive: true,
-            }
-            }
-            if (feature.properties['doc'] >= 4.000000 && feature.properties['doc'] <= 4.500000 ) {
-                return {
+            };
+                }
+                else if (exp_NetworkLinks_2rule9_eval_expression(context)) {
+                  return {
                 pane: 'pane_NetworkLinks_2',
                 opacity: 1,
                 color: 'rgba(92,252,112,1.0)',
@@ -313,10 +336,10 @@
                 weight: 1.0,
                 fillOpacity: 0,
                 interactive: true,
-            }
-            }
-            if (feature.properties['doc'] >= 4.500000 && feature.properties['doc'] <= 5.000000 ) {
-                return {
+            };
+                }
+                else if (exp_NetworkLinks_2rule10_eval_expression(context)) {
+                  return {
                 pane: 'pane_NetworkLinks_2',
                 opacity: 1,
                 color: 'rgba(144,255,72,1.0)',
@@ -326,10 +349,10 @@
                 weight: 1.0,
                 fillOpacity: 0,
                 interactive: true,
-            }
-            }
-            if (feature.properties['doc'] >= 5.000000 && feature.properties['doc'] <= 5.500000 ) {
-                return {
+            };
+                }
+                else if (exp_NetworkLinks_2rule11_eval_expression(context)) {
+                  return {
                 pane: 'pane_NetworkLinks_2',
                 opacity: 1,
                 color: 'rgba(182,247,53,1.0)',
@@ -339,10 +362,10 @@
                 weight: 1.0,
                 fillOpacity: 0,
                 interactive: true,
-            }
-            }
-            if (feature.properties['doc'] >= 5.500000 && feature.properties['doc'] <= 6.000000 ) {
-                return {
+            };
+                }
+                else if (exp_NetworkLinks_2rule12_eval_expression(context)) {
+                  return {
                 pane: 'pane_NetworkLinks_2',
                 opacity: 1,
                 color: 'rgba(215,229,53,1.0)',
@@ -352,10 +375,10 @@
                 weight: 1.0,
                 fillOpacity: 0,
                 interactive: true,
-            }
-            }
-            if (feature.properties['doc'] >= 6.000000 && feature.properties['doc'] <= 6.500000 ) {
-                return {
+            };
+                }
+                else if (exp_NetworkLinks_2rule13_eval_expression(context)) {
+                  return {
                 pane: 'pane_NetworkLinks_2',
                 opacity: 1,
                 color: 'rgba(240,204,58,1.0)',
@@ -365,10 +388,10 @@
                 weight: 1.0,
                 fillOpacity: 0,
                 interactive: true,
-            }
-            }
-            if (feature.properties['doc'] >= 6.500000 && feature.properties['doc'] <= 7.000000 ) {
-                return {
+            };
+                }
+                else if (exp_NetworkLinks_2rule14_eval_expression(context)) {
+                  return {
                 pane: 'pane_NetworkLinks_2',
                 opacity: 1,
                 color: 'rgba(253,174,53,1.0)',
@@ -378,10 +401,10 @@
                 weight: 1.0,
                 fillOpacity: 0,
                 interactive: true,
-            }
-            }
-            if (feature.properties['doc'] >= 7.000000 && feature.properties['doc'] <= 7.500000 ) {
-                return {
+            };
+                }
+                else if (exp_NetworkLinks_2rule15_eval_expression(context)) {
+                  return {
                 pane: 'pane_NetworkLinks_2',
                 opacity: 1,
                 color: 'rgba(252,136,37,1.0)',
@@ -391,10 +414,10 @@
                 weight: 1.0,
                 fillOpacity: 0,
                 interactive: true,
-            }
-            }
-            if (feature.properties['doc'] >= 7.500000 && feature.properties['doc'] <= 8.000000 ) {
-                return {
+            };
+                }
+                else if (exp_NetworkLinks_2rule16_eval_expression(context)) {
+                  return {
                 pane: 'pane_NetworkLinks_2',
                 opacity: 1,
                 color: 'rgba(242,96,20,1.0)',
@@ -404,10 +427,10 @@
                 weight: 1.0,
                 fillOpacity: 0,
                 interactive: true,
-            }
-            }
-            if (feature.properties['doc'] >= 8.000000 && feature.properties['doc'] <= 8.500000 ) {
-                return {
+            };
+                }
+                else if (exp_NetworkLinks_2rule17_eval_expression(context)) {
+                  return {
                 pane: 'pane_NetworkLinks_2',
                 opacity: 1,
                 color: 'rgba(224,64,8,1.0)',
@@ -417,10 +440,10 @@
                 weight: 1.0,
                 fillOpacity: 0,
                 interactive: true,
-            }
-            }
-            if (feature.properties['doc'] >= 8.500000 && feature.properties['doc'] <= 9.000000 ) {
-                return {
+            };
+                }
+                else if (exp_NetworkLinks_2rule18_eval_expression(context)) {
+                  return {
                 pane: 'pane_NetworkLinks_2',
                 opacity: 1,
                 color: 'rgba(197,38,3,1.0)',
@@ -430,10 +453,10 @@
                 weight: 1.0,
                 fillOpacity: 0,
                 interactive: true,
-            }
-            }
-            if (feature.properties['doc'] >= 9.000000 && feature.properties['doc'] <= 9.500000 ) {
-                return {
+            };
+                }
+                else if (exp_NetworkLinks_2rule19_eval_expression(context)) {
+                  return {
                 pane: 'pane_NetworkLinks_2',
                 opacity: 1,
                 color: 'rgba(162,18,1,1.0)',
@@ -443,20 +466,20 @@
                 weight: 1.0,
                 fillOpacity: 0,
                 interactive: true,
-            }
-            }
-            if (feature.properties['doc'] >= 9.500000 && feature.properties['doc'] <= 10.000000 ) {
+            };
+                }
+            else {
                 return {
                 pane: 'pane_NetworkLinks_2',
                 opacity: 1,
-                color: 'rgba(122,4,3,1.0)',
+                color: 'rgba(135,135,135,1.0)',
                 dashArray: '',
                 lineCap: 'square',
                 lineJoin: 'bevel',
                 weight: 1.0,
                 fillOpacity: 0,
                 interactive: true,
-            }
+            };
             }
         }
         map.createPane('pane_NetworkLinks_2');
@@ -485,7 +508,7 @@
             title.addTo(map);
         var baseMaps = {};
         var overlaysTree = [
-            {label: 'Network Links<br /><table><tr><td style="text-align: center;"><img src="legend/NetworkLinks_2_0050.png" /></td><td>0 - 0.5</td></tr><tr><td style="text-align: center;"><img src="legend/NetworkLinks_2_0511.png" /></td><td>0.5 - 1</td></tr><tr><td style="text-align: center;"><img src="legend/NetworkLinks_2_1152.png" /></td><td>1 - 1.5</td></tr><tr><td style="text-align: center;"><img src="legend/NetworkLinks_2_1523.png" /></td><td>1.5 - 2</td></tr><tr><td style="text-align: center;"><img src="legend/NetworkLinks_2_2254.png" /></td><td>2 - 2.5</td></tr><tr><td style="text-align: center;"><img src="legend/NetworkLinks_2_2535.png" /></td><td>2.5 - 3</td></tr><tr><td style="text-align: center;"><img src="legend/NetworkLinks_2_3356.png" /></td><td>3 - 3.5</td></tr><tr><td style="text-align: center;"><img src="legend/NetworkLinks_2_3547.png" /></td><td>3.5 - 4</td></tr><tr><td style="text-align: center;"><img src="legend/NetworkLinks_2_4458.png" /></td><td>4 - 4.5</td></tr><tr><td style="text-align: center;"><img src="legend/NetworkLinks_2_4559.png" /></td><td>4.5 - 5</td></tr><tr><td style="text-align: center;"><img src="legend/NetworkLinks_2_55510.png" /></td><td>5 - 5.5</td></tr><tr><td style="text-align: center;"><img src="legend/NetworkLinks_2_55611.png" /></td><td>5.5 - 6</td></tr><tr><td style="text-align: center;"><img src="legend/NetworkLinks_2_66512.png" /></td><td>6 - 6.5</td></tr><tr><td style="text-align: center;"><img src="legend/NetworkLinks_2_65713.png" /></td><td>6.5 - 7</td></tr><tr><td style="text-align: center;"><img src="legend/NetworkLinks_2_77514.png" /></td><td>7 - 7.5</td></tr><tr><td style="text-align: center;"><img src="legend/NetworkLinks_2_75815.png" /></td><td>7.5 - 8</td></tr><tr><td style="text-align: center;"><img src="legend/NetworkLinks_2_88516.png" /></td><td>8 - 8.5</td></tr><tr><td style="text-align: center;"><img src="legend/NetworkLinks_2_85917.png" /></td><td>8.5 - 9</td></tr><tr><td style="text-align: center;"><img src="legend/NetworkLinks_2_99518.png" /></td><td>9 - 9.5</td></tr><tr><td style="text-align: center;"><img src="legend/NetworkLinks_2_951019.png" /></td><td>9.5 - 10</td></tr></table>', layer: layer_NetworkLinks_2},
+            {label: 'Network Links<br /><table><tr><td style="text-align: center;"><img src="legend/NetworkLinks_2_00000.png" /></td><td>0.0 - 0.0</td></tr><tr><td style="text-align: center;"><img src="legend/NetworkLinks_2_0051.png" /></td><td>0 - 0.5</td></tr><tr><td style="text-align: center;"><img src="legend/NetworkLinks_2_0512.png" /></td><td>0.5 - 1</td></tr><tr><td style="text-align: center;"><img src="legend/NetworkLinks_2_1153.png" /></td><td>1 - 1.5</td></tr><tr><td style="text-align: center;"><img src="legend/NetworkLinks_2_1524.png" /></td><td>1.5 - 2</td></tr><tr><td style="text-align: center;"><img src="legend/NetworkLinks_2_2255.png" /></td><td>2 - 2.5</td></tr><tr><td style="text-align: center;"><img src="legend/NetworkLinks_2_2536.png" /></td><td>2.5 - 3</td></tr><tr><td style="text-align: center;"><img src="legend/NetworkLinks_2_3357.png" /></td><td>3 - 3.5</td></tr><tr><td style="text-align: center;"><img src="legend/NetworkLinks_2_3548.png" /></td><td>3.5 - 4</td></tr><tr><td style="text-align: center;"><img src="legend/NetworkLinks_2_4459.png" /></td><td>4 - 4.5</td></tr><tr><td style="text-align: center;"><img src="legend/NetworkLinks_2_45510.png" /></td><td>4.5 - 5</td></tr><tr><td style="text-align: center;"><img src="legend/NetworkLinks_2_55511.png" /></td><td>5 - 5.5</td></tr><tr><td style="text-align: center;"><img src="legend/NetworkLinks_2_55612.png" /></td><td>5.5 - 6</td></tr><tr><td style="text-align: center;"><img src="legend/NetworkLinks_2_66513.png" /></td><td>6 - 6.5</td></tr><tr><td style="text-align: center;"><img src="legend/NetworkLinks_2_65714.png" /></td><td>6.5 - 7</td></tr><tr><td style="text-align: center;"><img src="legend/NetworkLinks_2_77515.png" /></td><td>7 - 7.5</td></tr><tr><td style="text-align: center;"><img src="legend/NetworkLinks_2_75816.png" /></td><td>7.5 - 8</td></tr><tr><td style="text-align: center;"><img src="legend/NetworkLinks_2_88517.png" /></td><td>8 - 8.5</td></tr><tr><td style="text-align: center;"><img src="legend/NetworkLinks_2_85918.png" /></td><td>8.5 - 9</td></tr><tr><td style="text-align: center;"><img src="legend/NetworkLinks_2_99519.png" /></td><td>9 - 9.5</td></tr><tr><td style="text-align: center;"><img src="legend/NetworkLinks_2_Noinformation20.png" /></td><td>No information</td></tr></table>', layer: layer_NetworkLinks_2},
             {label: '<img src="legend/Infrastructure_project_points_1.png" /> Infrastructure_project_points', layer: layer_Infrastructure_project_points_1},
             {label: "Positron", layer: layer_Positron_0},]
         var lay = L.control.layers.tree(null, overlaysTree,{
