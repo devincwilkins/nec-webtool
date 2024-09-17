@@ -6,10 +6,42 @@
         <meta name="viewport" content="initial-scale=1,user-scalable=no,maximum-scale=1,width=device-width">
         <meta name="mobile-web-app-capable" content="yes">
         <meta name="apple-mobile-web-app-capable" content="yes">
-        <link rel="stylesheet" href="css/leaflet.css">
-        <link rel="stylesheet" href="css/L.Control.Layers.Tree.css">
-        <link rel="stylesheet" href="css/qgis2web.css">
-        <link rel="stylesheet" href="css/fontawesome-all.min.css">
+        <link rel="stylesheet" href="./resources/ol.css">
+        <link rel="stylesheet" href="resources/fontawesome-all.min.css">
+        <link rel="stylesheet" href="./resources/ol-layerswitcher.css">
+        <link rel="stylesheet" href="./resources/qgis2web.css">
+<style>
+.search-layer {
+  top: 65px;
+  left: .5em;
+}
+.ol-touch .search-layer {
+  top: 80px;
+}
+</style>
+        <style>
+        html, body {
+            background-color: #ffffff;
+        }
+        .ol-control button {
+            background-color: #f8f8f8 !important;
+            color: #000000 !important;
+            border-radius: 0px !important;
+        }
+        .ol-zoom, .geolocate, .gcd-gl-control .ol-control {
+            background-color: rgba(255,255,255,.4) !important;
+            padding: 3px !important;
+        }
+        .ol-scale-line {
+            background: none !important;
+        }
+        .ol-scale-line-inner {
+            border: 2px solid #f8f8f8 !important;
+            border-top: none !important;
+            background: rgba(255, 255, 255, 0.5) !important;
+            color: black !important;
+        }
+        </style>
         <style>
         html, body, #map {
             width: 100%;
@@ -22,506 +54,20 @@
     </head>
     <body>
         <div id="map">
+            <div id="popup" class="ol-popup">
+                <a href="#" id="popup-closer" class="ol-popup-closer"></a>
+                <div id="popup-content"></div>
+            </div>
         </div>
-        <script src="js/qgis2web_expressions.js"></script>
-        <script src="js/leaflet.js"></script>
-        <script src="js/L.Control.Layers.Tree.min.js"></script>
-        <script src="js/leaflet-svg-shape-markers.min.js"></script>
-        <script src="js/leaflet.rotatedMarker.js"></script>
-        <script src="js/leaflet.pattern.js"></script>
-        <script src="js/leaflet-hash.js"></script>
-        <script src="js/Autolinker.min.js"></script>
-        <script src="js/rbush.min.js"></script>
-        <script src="js/labelgun.min.js"></script>
-        <script src="js/labels.js"></script>
-        <script src="data/Infrastructure_project_points_1.js"></script>
-        <script src="data/NetworkLinks_2.js"></script>
-        <script>
-        var highlightLayer;
-        function highlightFeature(e) {
-            highlightLayer = e.target;
-
-            if (e.target.feature.geometry.type === 'LineString' || e.target.feature.geometry.type === 'MultiLineString') {
-              highlightLayer.setStyle({
-                color: '#00fff7',
-              });
-            } else {
-              highlightLayer.setStyle({
-                fillColor: '#00fff7',
-                fillOpacity: 1
-              });
-            }
-        }
-        var map = L.map('map', {
-            zoomControl:true, maxZoom:28, minZoom:1
-        })
-        var hash = new L.Hash(map);
-        map.attributionControl.setPrefix('<a href="https://github.com/tomchadwin/qgis2web" target="_blank">qgis2web</a> &middot; <a href="https://leafletjs.com" title="A JS library for interactive maps">Leaflet</a> &middot; <a href="https://qgis.org">QGIS</a>');
-        var autolinker = new Autolinker({truncate: {length: 30, location: 'smart'}});
-        function removeEmptyRowsFromPopupContent(content, feature) {
-         var tempDiv = document.createElement('div');
-         tempDiv.innerHTML = content;
-         var rows = tempDiv.querySelectorAll('tr');
-         for (var i = 0; i < rows.length; i++) {
-             var td = rows[i].querySelector('td.visible-with-data');
-             var key = td ? td.id : '';
-             if (td && td.classList.contains('visible-with-data') && feature.properties[key] == null) {
-                 rows[i].parentNode.removeChild(rows[i]);
-             }
-         }
-         return tempDiv.innerHTML;
-        }
-        document.querySelector(".leaflet-popup-pane").addEventListener("load", function(event) {
-          var tagName = event.target.tagName,
-            popup = map._popup;
-          // Also check if flag is already set.
-          if (tagName === "IMG" && popup && !popup._updated) {
-            popup._updated = true; // Set flag to prevent looping.
-            popup.update();
-          }
-        }, true);
-        var bounds_group = new L.featureGroup([]);
-        function setBounds() {
-            if (bounds_group.getLayers().length) {
-                map.fitBounds(bounds_group.getBounds());
-            }
-            map.setMaxBounds(map.getBounds());
-        }
-        map.createPane('pane_Positron_0');
-        map.getPane('pane_Positron_0').style.zIndex = 400;
-        var layer_Positron_0 = L.tileLayer('https://a.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png', {
-            pane: 'pane_Positron_0',
-            opacity: 1.0,
-            attribution: '<a href="https://cartodb.com/basemaps/">Map tiles by CartoDB, under CC BY 3.0. Data by OpenStreetMap, under ODbL.</a>',
-            minZoom: 1,
-            maxZoom: 28,
-            minNativeZoom: 0,
-            maxNativeZoom: 20
-        });
-        layer_Positron_0;
-        map.addLayer(layer_Positron_0);
-        function pop_Infrastructure_project_points_1(feature, layer) {
-            layer.on({
-                mouseout: function(e) {
-                    for (var i in e.target._eventParents) {
-                        if (typeof e.target._eventParents[i].resetStyle === 'function') {
-                            e.target._eventParents[i].resetStyle(e.target);
-                        }
-                    }
-                },
-                mouseover: highlightFeature,
-            });
-            var popupContent = '<table>\
-                    <tr>\
-                        <th scope="row">Proj_Name</th>\
-                        <td class="visible-with-data" id="Proj_Name">' + (feature.properties['Proj_Name'] !== null ? autolinker.link(feature.properties['Proj_Name'].toLocaleString()) : '') + '</td>\
-                    </tr>\
-                    <tr>\
-                        <th scope="row">Proj_Type</th>\
-                        <td class="visible-with-data" id="Proj_Type">' + (feature.properties['Proj_Type'] !== null ? autolinker.link(feature.properties['Proj_Type'].toLocaleString()) : '') + '</td>\
-                    </tr>\
-                </table>';
-            layer.bindPopup(popupContent, {maxHeight: 400});
-            var popup = layer.getPopup();
-            var content = popup.getContent();
-            var updatedContent = removeEmptyRowsFromPopupContent(content, feature);
-            popup.setContent(updatedContent);
-        }
-
-        function style_Infrastructure_project_points_1_0() {
-            return {
-                pane: 'pane_Infrastructure_project_points_1',
-                shape: 'triangle',
-                radius: 8.0,
-                opacity: 1,
-                color: 'rgba(0,17,25,1.0)',
-                dashArray: '',
-                lineCap: 'butt',
-                lineJoin: 'miter',
-                weight: 3.0,
-                fill: true,
-                fillOpacity: 1,
-                fillColor: 'rgba(244,226,33,1.0)',
-                interactive: true,
-            }
-        }
-        map.createPane('pane_Infrastructure_project_points_1');
-        map.getPane('pane_Infrastructure_project_points_1').style.zIndex = 401;
-        map.getPane('pane_Infrastructure_project_points_1').style['mix-blend-mode'] = 'normal';
-        var layer_Infrastructure_project_points_1 = new L.geoJson(json_Infrastructure_project_points_1, {
-            attribution: '',
-            interactive: true,
-            dataVar: 'json_Infrastructure_project_points_1',
-            layerName: 'layer_Infrastructure_project_points_1',
-            pane: 'pane_Infrastructure_project_points_1',
-            onEachFeature: pop_Infrastructure_project_points_1,
-            pointToLayer: function (feature, latlng) {
-                var context = {
-                    feature: feature,
-                    variables: {}
-                };
-                return L.shapeMarker(latlng, style_Infrastructure_project_points_1_0(feature));
-            },
-        });
-        bounds_group.addLayer(layer_Infrastructure_project_points_1);
-        map.addLayer(layer_Infrastructure_project_points_1);
-        function pop_NetworkLinks_2(feature, layer) {
-            layer.on({
-                mouseout: function(e) {
-                    for (var i in e.target._eventParents) {
-                        if (typeof e.target._eventParents[i].resetStyle === 'function') {
-                            e.target._eventParents[i].resetStyle(e.target);
-                        }
-                    }
-                },
-                mouseover: highlightFeature,
-            });
-            var popupContent = '<table>\
-                    <tr>\
-                        <th scope="row">Degree of Curvature</th>\
-                        <td class="visible-with-data" id="doc">' + (feature.properties['doc'] !== null ? autolinker.link(feature.properties['doc'].toLocaleString()) : '') + '</td>\
-                    </tr>\
-                    <tr>\
-                        <th scope="row">Length (m)</th>\
-                        <td class="visible-with-data" id="length">' + (feature.properties['length'] !== null ? autolinker.link(feature.properties['length'].toLocaleString()) : '') + '</td>\
-                    </tr>\
-                    <tr>\
-                        <th scope="row">Speed Allowance (km/h)</th>\
-                        <td class="visible-with-data" id="speed_cr">' + (feature.properties['speed_cr'] !== null ? autolinker.link(feature.properties['speed_cr'].toLocaleString()) : '') + '</td>\
-                    </tr>\
-                    <tr>\
-                        <td colspan="2">' + (feature.properties['track_num'] !== null ? autolinker.link(feature.properties['track_num'].toLocaleString()) : '') + '</td>\
-                    </tr>\
-                    <tr>\
-                        <td colspan="2">' + (feature.properties['Section'] !== null ? autolinker.link(feature.properties['Section'].toLocaleString()) : '') + '</td>\
-                    </tr>\
-                </table>';
-            layer.bindPopup(popupContent, {maxHeight: 400});
-            var popup = layer.getPopup();
-            var content = popup.getContent();
-            var updatedContent = removeEmptyRowsFromPopupContent(content, feature);
-            popup.setContent(updatedContent);
-        }
-        function style_NetworkLinks_2_0(feature) {
-            var context = {
-                feature: feature,
-                variables: {}
-            };
-            // Start of if blocks and style check logic
-            if (exp_NetworkLinks_2rule0_eval_expression(context)) {
-                  return {
-                pane: 'pane_NetworkLinks_2',
-                opacity: 1,
-                color: 'rgba(48,18,59,1.0)',
-                dashArray: '',
-                lineCap: 'square',
-                lineJoin: 'bevel',
-                weight: 1.0,
-                fillOpacity: 0,
-                interactive: true,
-            };
-                }
-                else if (exp_NetworkLinks_2rule1_eval_expression(context)) {
-                  return {
-                pane: 'pane_NetworkLinks_2',
-                opacity: 1,
-                color: 'rgba(48,18,59,1.0)',
-                dashArray: '',
-                lineCap: 'square',
-                lineJoin: 'bevel',
-                weight: 1.0,
-                fillOpacity: 0,
-                interactive: true,
-            };
-                }
-                else if (exp_NetworkLinks_2rule2_eval_expression(context)) {
-                  return {
-                pane: 'pane_NetworkLinks_2',
-                opacity: 1,
-                color: 'rgba(62,57,148,1.0)',
-                dashArray: '',
-                lineCap: 'square',
-                lineJoin: 'bevel',
-                weight: 1.0,
-                fillOpacity: 0,
-                interactive: true,
-            };
-                }
-                else if (exp_NetworkLinks_2rule3_eval_expression(context)) {
-                  return {
-                pane: 'pane_NetworkLinks_2',
-                opacity: 1,
-                color: 'rgba(69,94,211,1.0)',
-                dashArray: '',
-                lineCap: 'square',
-                lineJoin: 'bevel',
-                weight: 1.0,
-                fillOpacity: 0,
-                interactive: true,
-            };
-                }
-                else if (exp_NetworkLinks_2rule4_eval_expression(context)) {
-                  return {
-                pane: 'pane_NetworkLinks_2',
-                opacity: 1,
-                color: 'rgba(70,129,247,1.0)',
-                dashArray: '',
-                lineCap: 'square',
-                lineJoin: 'bevel',
-                weight: 1.0,
-                fillOpacity: 0,
-                interactive: true,
-            };
-                }
-                else if (exp_NetworkLinks_2rule5_eval_expression(context)) {
-                  return {
-                pane: 'pane_NetworkLinks_2',
-                opacity: 1,
-                color: 'rgba(58,163,252,1.0)',
-                dashArray: '',
-                lineCap: 'square',
-                lineJoin: 'bevel',
-                weight: 1.0,
-                fillOpacity: 0,
-                interactive: true,
-            };
-                }
-                else if (exp_NetworkLinks_2rule6_eval_expression(context)) {
-                  return {
-                pane: 'pane_NetworkLinks_2',
-                opacity: 1,
-                color: 'rgba(35,196,227,1.0)',
-                dashArray: '',
-                lineCap: 'square',
-                lineJoin: 'bevel',
-                weight: 1.0,
-                fillOpacity: 0,
-                interactive: true,
-            };
-                }
-                else if (exp_NetworkLinks_2rule7_eval_expression(context)) {
-                  return {
-                pane: 'pane_NetworkLinks_2',
-                opacity: 1,
-                color: 'rgba(24,222,192,1.0)',
-                dashArray: '',
-                lineCap: 'square',
-                lineJoin: 'bevel',
-                weight: 1.0,
-                fillOpacity: 0,
-                interactive: true,
-            };
-                }
-                else if (exp_NetworkLinks_2rule8_eval_expression(context)) {
-                  return {
-                pane: 'pane_NetworkLinks_2',
-                opacity: 1,
-                color: 'rgba(45,240,157,1.0)',
-                dashArray: '',
-                lineCap: 'square',
-                lineJoin: 'bevel',
-                weight: 1.0,
-                fillOpacity: 0,
-                interactive: true,
-            };
-                }
-                else if (exp_NetworkLinks_2rule9_eval_expression(context)) {
-                  return {
-                pane: 'pane_NetworkLinks_2',
-                opacity: 1,
-                color: 'rgba(92,252,112,1.0)',
-                dashArray: '',
-                lineCap: 'square',
-                lineJoin: 'bevel',
-                weight: 1.0,
-                fillOpacity: 0,
-                interactive: true,
-            };
-                }
-                else if (exp_NetworkLinks_2rule10_eval_expression(context)) {
-                  return {
-                pane: 'pane_NetworkLinks_2',
-                opacity: 1,
-                color: 'rgba(144,255,72,1.0)',
-                dashArray: '',
-                lineCap: 'square',
-                lineJoin: 'bevel',
-                weight: 1.0,
-                fillOpacity: 0,
-                interactive: true,
-            };
-                }
-                else if (exp_NetworkLinks_2rule11_eval_expression(context)) {
-                  return {
-                pane: 'pane_NetworkLinks_2',
-                opacity: 1,
-                color: 'rgba(182,247,53,1.0)',
-                dashArray: '',
-                lineCap: 'square',
-                lineJoin: 'bevel',
-                weight: 1.0,
-                fillOpacity: 0,
-                interactive: true,
-            };
-                }
-                else if (exp_NetworkLinks_2rule12_eval_expression(context)) {
-                  return {
-                pane: 'pane_NetworkLinks_2',
-                opacity: 1,
-                color: 'rgba(215,229,53,1.0)',
-                dashArray: '',
-                lineCap: 'square',
-                lineJoin: 'bevel',
-                weight: 1.0,
-                fillOpacity: 0,
-                interactive: true,
-            };
-                }
-                else if (exp_NetworkLinks_2rule13_eval_expression(context)) {
-                  return {
-                pane: 'pane_NetworkLinks_2',
-                opacity: 1,
-                color: 'rgba(240,204,58,1.0)',
-                dashArray: '',
-                lineCap: 'square',
-                lineJoin: 'bevel',
-                weight: 1.0,
-                fillOpacity: 0,
-                interactive: true,
-            };
-                }
-                else if (exp_NetworkLinks_2rule14_eval_expression(context)) {
-                  return {
-                pane: 'pane_NetworkLinks_2',
-                opacity: 1,
-                color: 'rgba(253,174,53,1.0)',
-                dashArray: '',
-                lineCap: 'square',
-                lineJoin: 'bevel',
-                weight: 1.0,
-                fillOpacity: 0,
-                interactive: true,
-            };
-                }
-                else if (exp_NetworkLinks_2rule15_eval_expression(context)) {
-                  return {
-                pane: 'pane_NetworkLinks_2',
-                opacity: 1,
-                color: 'rgba(252,136,37,1.0)',
-                dashArray: '',
-                lineCap: 'square',
-                lineJoin: 'bevel',
-                weight: 1.0,
-                fillOpacity: 0,
-                interactive: true,
-            };
-                }
-                else if (exp_NetworkLinks_2rule16_eval_expression(context)) {
-                  return {
-                pane: 'pane_NetworkLinks_2',
-                opacity: 1,
-                color: 'rgba(242,96,20,1.0)',
-                dashArray: '',
-                lineCap: 'square',
-                lineJoin: 'bevel',
-                weight: 1.0,
-                fillOpacity: 0,
-                interactive: true,
-            };
-                }
-                else if (exp_NetworkLinks_2rule17_eval_expression(context)) {
-                  return {
-                pane: 'pane_NetworkLinks_2',
-                opacity: 1,
-                color: 'rgba(224,64,8,1.0)',
-                dashArray: '',
-                lineCap: 'square',
-                lineJoin: 'bevel',
-                weight: 1.0,
-                fillOpacity: 0,
-                interactive: true,
-            };
-                }
-                else if (exp_NetworkLinks_2rule18_eval_expression(context)) {
-                  return {
-                pane: 'pane_NetworkLinks_2',
-                opacity: 1,
-                color: 'rgba(197,38,3,1.0)',
-                dashArray: '',
-                lineCap: 'square',
-                lineJoin: 'bevel',
-                weight: 1.0,
-                fillOpacity: 0,
-                interactive: true,
-            };
-                }
-                else if (exp_NetworkLinks_2rule19_eval_expression(context)) {
-                  return {
-                pane: 'pane_NetworkLinks_2',
-                opacity: 1,
-                color: 'rgba(162,18,1,1.0)',
-                dashArray: '',
-                lineCap: 'square',
-                lineJoin: 'bevel',
-                weight: 1.0,
-                fillOpacity: 0,
-                interactive: true,
-            };
-                }
-            else {
-                return {
-                pane: 'pane_NetworkLinks_2',
-                opacity: 1,
-                color: 'rgba(135,135,135,1.0)',
-                dashArray: '',
-                lineCap: 'square',
-                lineJoin: 'bevel',
-                weight: 1.0,
-                fillOpacity: 0,
-                interactive: true,
-            };
-            }
-        }
-        map.createPane('pane_NetworkLinks_2');
-        map.getPane('pane_NetworkLinks_2').style.zIndex = 402;
-        map.getPane('pane_NetworkLinks_2').style['mix-blend-mode'] = 'normal';
-        var layer_NetworkLinks_2 = new L.geoJson(json_NetworkLinks_2, {
-            attribution: '',
-            interactive: true,
-            dataVar: 'json_NetworkLinks_2',
-            layerName: 'layer_NetworkLinks_2',
-            pane: 'pane_NetworkLinks_2',
-            onEachFeature: pop_NetworkLinks_2,
-            style: style_NetworkLinks_2_0,
-        });
-        bounds_group.addLayer(layer_NetworkLinks_2);
-        map.addLayer(layer_NetworkLinks_2);
-            var title = new L.Control();
-            title.onAdd = function (map) {
-                this._div = L.DomUtil.create('div', 'info');
-                this.update();
-                return this._div;
-            };
-            title.update = function () {
-                this._div.innerHTML = '<h2>Northeast Corridor Webtool</h2>';
-            };
-            title.addTo(map);
-        var baseMaps = {};
-        var overlaysTree = [
-            {label: 'Network Links<br /><table><tr><td style="text-align: center;"><img src="legend/NetworkLinks_2_00000.png" /></td><td>0.0 - 0.0</td></tr><tr><td style="text-align: center;"><img src="legend/NetworkLinks_2_0051.png" /></td><td>0 - 0.5</td></tr><tr><td style="text-align: center;"><img src="legend/NetworkLinks_2_0512.png" /></td><td>0.5 - 1</td></tr><tr><td style="text-align: center;"><img src="legend/NetworkLinks_2_1153.png" /></td><td>1 - 1.5</td></tr><tr><td style="text-align: center;"><img src="legend/NetworkLinks_2_1524.png" /></td><td>1.5 - 2</td></tr><tr><td style="text-align: center;"><img src="legend/NetworkLinks_2_2255.png" /></td><td>2 - 2.5</td></tr><tr><td style="text-align: center;"><img src="legend/NetworkLinks_2_2536.png" /></td><td>2.5 - 3</td></tr><tr><td style="text-align: center;"><img src="legend/NetworkLinks_2_3357.png" /></td><td>3 - 3.5</td></tr><tr><td style="text-align: center;"><img src="legend/NetworkLinks_2_3548.png" /></td><td>3.5 - 4</td></tr><tr><td style="text-align: center;"><img src="legend/NetworkLinks_2_4459.png" /></td><td>4 - 4.5</td></tr><tr><td style="text-align: center;"><img src="legend/NetworkLinks_2_45510.png" /></td><td>4.5 - 5</td></tr><tr><td style="text-align: center;"><img src="legend/NetworkLinks_2_55511.png" /></td><td>5 - 5.5</td></tr><tr><td style="text-align: center;"><img src="legend/NetworkLinks_2_55612.png" /></td><td>5.5 - 6</td></tr><tr><td style="text-align: center;"><img src="legend/NetworkLinks_2_66513.png" /></td><td>6 - 6.5</td></tr><tr><td style="text-align: center;"><img src="legend/NetworkLinks_2_65714.png" /></td><td>6.5 - 7</td></tr><tr><td style="text-align: center;"><img src="legend/NetworkLinks_2_77515.png" /></td><td>7 - 7.5</td></tr><tr><td style="text-align: center;"><img src="legend/NetworkLinks_2_75816.png" /></td><td>7.5 - 8</td></tr><tr><td style="text-align: center;"><img src="legend/NetworkLinks_2_88517.png" /></td><td>8 - 8.5</td></tr><tr><td style="text-align: center;"><img src="legend/NetworkLinks_2_85918.png" /></td><td>8.5 - 9</td></tr><tr><td style="text-align: center;"><img src="legend/NetworkLinks_2_99519.png" /></td><td>9 - 9.5</td></tr><tr><td style="text-align: center;"><img src="legend/NetworkLinks_2_Noinformation20.png" /></td><td>No information</td></tr></table>', layer: layer_NetworkLinks_2},
-            {label: '<img src="legend/Infrastructure_project_points_1.png" /> Infrastructure_project_points', layer: layer_Infrastructure_project_points_1},
-            {label: "Positron", layer: layer_Positron_0},]
-        var lay = L.control.layers.tree(null, overlaysTree,{
-            //namedToggle: true,
-            //selectorBack: false,
-            //closedSymbol: '&#8862; &#x1f5c0;',
-            //openedSymbol: '&#8863; &#x1f5c1;',
-            //collapseAll: 'Collapse all',
-            //expandAll: 'Expand all',
-            collapsed: true,
-        });
-        lay.addTo(map);
-        setBounds();
-        </script>
+        <script src="resources/qgis2web_expressions.js"></script>
+        <script src="resources/polyfills.js"></script>
+        <script src="./resources/functions.js"></script>
+        <script src="./resources/ol.js"></script>
+        <script src="./resources/ol-layerswitcher.js"></script>
+        <script src="layers/InfrastructureProjects_1.js"></script><script src="layers/Network_September10_2.js"></script><script src="layers/Platforms_3.js"></script><script src="layers/15m_takings_4.js"></script>
+        <script src="styles/InfrastructureProjects_1_style.js"></script><script src="styles/Network_September10_2_style.js"></script><script src="styles/Platforms_3_style.js"></script><script src="styles/15m_takings_4_style.js"></script>
+        <script src="./layers/layers.js" type="text/javascript"></script> 
+        <script src="./resources/Autolinker.min.js"></script>
+        <script src="./resources/qgis2web.js"></script>
     </body>
 </html>
