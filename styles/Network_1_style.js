@@ -1,6 +1,6 @@
 var size = 0;
 var placement = 'point';
-function categories_Network_September10_2(feature, value, size, resolution, labelText,
+function categories_Network_1(feature, value, size, resolution, labelText,
                        labelFont, labelFill, bufferColor, bufferWidth,
                        placement) {
                 switch(value.toString()) {case '_':
@@ -1764,7 +1764,7 @@ default:
     })];
                     break;}};
 
-var style_Network_September10_2 = function(feature, resolution){
+var style_Network_1 = function(feature, resolution){
     var context = {
         feature: feature,
         variables: {}
@@ -1784,7 +1784,7 @@ var style_Network_September10_2 = function(feature, resolution){
         labelText = String("");
     }
     
-var style = categories_Network_September10_2(feature, value, size, resolution, labelText,
+var style = categories_Network_1(feature, value, size, resolution, labelText,
                           labelFont, labelFill, bufferColor,
                           bufferWidth, placement);
 
