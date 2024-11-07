@@ -1,7 +1,7 @@
 var size = 0;
 var placement = 'point';
 
-var style_Platforms_October22_J_2 = function(feature, resolution){
+var style_Platforms_2 = function(feature, resolution){
     var context = {
         feature: feature,
         variables: {}
